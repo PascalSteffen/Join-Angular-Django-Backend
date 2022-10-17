@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { DocumentData, Firestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { SignUpComponent } from '../auth-components/sign-up/sign-up.component';
-import { AuthService } from '../shared/services/auth-service/auth.service';
-import { FirebaseService } from '../shared/services/firebase-service/firebase.service';
+import { Ticket } from '../shared/interfaces/ticket';
+import { AuthenticationService } from '../shared/services/authentication-service/authentication.service';
 import { TicketService } from '../shared/services/ticket-service/ticket.service';
 import { EditUserComponent } from '../user-components/edit-user/edit-user.component';
 
@@ -15,36 +14,22 @@ import { EditUserComponent } from '../user-components/edit-user/edit-user.compon
 })
 
 export class MainContentComponent implements OnInit {
-
-  public allUsers$: Observable<DocumentData[]>;
-  public allTickets$: Observable<DocumentData[]>;
-  public allCalendarEvents$: Observable<DocumentData[]>;
-  public allTasks$: Observable<DocumentData[]>;
+  public allTickets$: Observable<Ticket[]>;
 
   showFiller = false;
 
-  constructor(public authService: AuthService,
-    public firestore: Firestore,
-    public dialog: MatDialog,
-    public firebaseService: FirebaseService,
-    public ticketService: TicketService) { }
+  constructor(public dialog: MatDialog,
+    public ticketService: TicketService,
+    public authenticationService: AuthenticationService) { }
 
 
   ngOnInit(): void {
-    this.allCalendarEvents$ = this.firebaseService.getAllCalendarEvents();
-    this.firebaseService.initAllCalendarEvents();
-
-    this.allUsers$ = this.firebaseService.getAllUsers();
-    this.firebaseService.initAllUsers();
-
-    this.allTasks$ = this.firebaseService.getAllTasks();
-    this.firebaseService.initAllTasks();
-
-    this.allTickets$ = this.firebaseService.getAllTickets();
+    this.authenticationService.isAuthenticated();
+    this.allTickets$ = this.ticketService.getAllTickets();
     this.allTickets$.subscribe(allTickets => {
-      this.ticketService.allTicketsLength = allTickets.length
+      this.ticketService.allTicketsLength = allTickets.length;
     })
-    this.firebaseService.initAllTickets();
+    this.ticketService.initAllTickets();
   }
 
 

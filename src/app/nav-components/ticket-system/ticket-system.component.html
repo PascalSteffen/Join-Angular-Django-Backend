@@ -27,25 +27,25 @@
 <div class="table-design-mode">
   <mat-card *ngIf="loading && ticketService.allTicketsLength >= 1" class="mt-2rem ticket-container">
     <div class="row headline-container border-bottom pb-3">
-      <!--     <span class="col-1 mobile">No.</span> -->
+      <!-- <span class="col-1 mobile">No.</span> -->
       <span class="col mobile">Date</span>
       <span class="col">From User</span>
       <span class="col">Title</span>
       <span class="col assignTo">Assigned To</span>
     </div>
     <div class="ticket-content-container">
-      <div *ngIf="authService.userData as user">
-        <div *ngFor="let users of allUsers$ | async">
-          <div *ngIf="user.uid == users['userId']">
-            <div class="row py-3 border-bottom ticket-content-container-child"
-              (click)="openTicket(ticket['ticket'].from, user.displayName, user.uid, users['userId'], users['admin'], ticket.ticketId)"
-              *ngFor="let ticket of allTickets$ | async | searchfilter:name | sortTicket: 'no'">
-              <!--             <span class="col-1 mobile">{{ticket['ticket'].no}}.</span> -->
-              <span class="col mobile">{{ticket['ticket'].date | date: 'MMM d, y, h:mm:ss a'}}</span>
-              <span class="col">{{ticket['ticket'].from}}</span>
-              <span class="col">{{ticket['ticket'].title}}</span>
-              <span class="col assignTo">{{ticket['ticket'].assignTo}}</span>
-            </div>
+      <div>
+        <div>
+          <div class="row py-3 border-bottom ticket-content-container-child"
+            (click)="openTicket(ticket.from_user.username, ticket.id)"
+            *ngFor="let ticket of allTickets$ | async | searchfilter:name | sortTicket: 'id'">
+            <!-- <span class="col-1 mobile">{{ticket.id}}</span> -->
+            <span class="col mobile">{{ticket.date | date: 'MMM d, y, h:mm a'}}</span>
+            <span class="col">{{ticket.from_user.first_name}} {{ticket.from_user.last_name}}</span>
+            <span class="col">{{ticket.title}}</span>
+            <span *ngIf="ticket.assigned_to !== null" class="col assignTo">{{ticket.assigned_to.first_name}}
+              {{ticket.assigned_to.last_name}}</span>
+            <span *ngIf="ticket.assigned_to == null" class="col assignTo">not assigned</span>
           </div>
         </div>
       </div>
@@ -56,29 +56,29 @@
 <div class="mobile-design-mode">
   <mat-card *ngIf="loading && ticketService.allTicketsLength >= 1" class="mt-2rem ticket-container">
     <div class="ticket-content-container">
-      <div *ngIf="authService.userData as user">
-        <div *ngFor="let users of allUsers$ | async">
-          <div *ngIf="user.uid == users['userId']">
-            <div class="row py-3 border-bottom ticket-content-container-child"
-              (click)="openTicket(ticket['ticket'].from, user.displayName, user.uid, users['userId'], users['admin'], ticket.ticketId)"
-              *ngFor="let ticket of allTickets$ | async | searchfilter:name | sortTicket: 'no'">
+      <div>
+        <div>
+          <div class="row py-3 border-bottom ticket-content-container-child"
+            (click)="openTicket(ticket.from_user.username, ticket.id)"
+            *ngFor="let ticket of allTickets$ | async | searchfilter:name | sortTicket: 'no'">
 
-              <div class="my-2 d-flex flex-column align-items-center text-center">
-                <span class="mobile-headline-design">Date:</span>
-                <span class="mobile-content-design">{{ticket['ticket'].date | date: 'MMM d, y, h:mm:ss a'}}</span>
-              </div>
-              <div class="my-2 d-flex flex-column align-items-center text-center">
-                <span class="mobile-headline-design">From User:</span>
-                <span class="mobile-content-design">{{ticket['ticket'].from}}</span>
-              </div>
-              <div class="my-2 d-flex flex-column align-items-center text-center">
-                <span class="mobile-headline-design">Title:</span>
-                <span class="mobile-content-design">{{ticket['ticket'].title}}</span>
-              </div>
-              <div class="my-2 d-flex flex-column align-items-center text-center">
-                <span class="mobile-headline-design">Assigned To:</span>
-                <span class="mobile-content-design">{{ticket['ticket'].assignTo}}</span>
-              </div>
+            <div class="my-2 d-flex flex-column align-items-center text-center">
+              <span class="mobile-headline-design">Date:</span>
+              <span class="mobile-content-design">{{ticket.date | date: 'MMM d, y, h:mm a'}}</span>
+            </div>
+            <div class="my-2 d-flex flex-column align-items-center text-center">
+              <span class="mobile-headline-design">From User:</span>
+              <span class="mobile-content-design">{{ticket.from_user.first_name}} {{ticket.from_user.last_name}}</span>
+            </div>
+            <div class="my-2 d-flex flex-column align-items-center text-center">
+              <span class="mobile-headline-design">Title:</span>
+              <span class="mobile-content-design">{{ticket.title}}</span>
+            </div>
+            <div class="my-2 d-flex flex-column align-items-center text-center">
+              <span class="mobile-headline-design">Assigned To:</span>
+              <span *ngIf="ticket.assigned_to !== null" class="mobile-content-design">{{ticket.assigned_to.first_name}}
+                {{ticket.assigned_to.last_name}}</span>
+              <span *ngIf="ticket.assigned_to == null" class="col assignTo">not assigned</span>
             </div>
           </div>
         </div>

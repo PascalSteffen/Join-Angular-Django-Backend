@@ -18,7 +18,7 @@ import { CalendarComponent } from './nav-components/calendar/calendar.component'
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/sign-in' },
   { path: 'sign-in', component: SignInComponent, canActivate: [AuthReverseGuard] },
-  { path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [AuthReverseGuard] },
+  /*   { path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [AuthReverseGuard] }, */
 
   { path: 'summary', component: SummaryComponent, canActivate: [AuthGuard] },
   { path: 'board', component: BoardComponent, canActivate: [AuthGuard] },

@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { DocumentData, Firestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { Task } from 'src/app/shared/interfaces/task';
-import { AuthService } from 'src/app/shared/services/auth-service/auth.service';
-import { FirebaseService } from 'src/app/shared/services/firebase-service/firebase.service';
+import { AuthenticationService } from 'src/app/shared/services/authentication-service/authentication.service';
 import { TaskService } from 'src/app/shared/services/task-service/task.service';
 import { DeleteTaskComponent } from '../delete-task/delete-task.component';
 import { EditTaskComponent } from '../edit-task/edit-task.component';
@@ -18,38 +16,43 @@ import { PushTaskComponent } from '../push-task/push-task.component';
 
 export class TaskDetailComponent implements OnInit {
 
-  public allUsers$: Observable<DocumentData[]>
-  taskId: string;
-  task: Task;
+  public allTasks$: Observable<Task[]>;
+  task: Task = this.taskService.taskDefault();
 
   constructor(public dialog: MatDialog,
-    public firestore: Firestore,
-    public authService: AuthService,
     public taskService: TaskService,
-    public firebaseService: FirebaseService) { }
+    public authenticationService: AuthenticationService) { }
 
 
   ngOnInit(): void {
-    this.allUsers$ = this.firebaseService.getAllUsers();
-    this.firebaseService.initAllUsers();
+    this.authenticationService.isAuthenticated();
   }
 
 
   openEditDialog() {
     const dialogRef = this.dialog.open(EditTaskComponent);
     dialogRef.componentInstance.task = this.task;
-    dialogRef.componentInstance.taskId = this.taskId;
+    dialogRef.afterClosed().subscribe(() => {
+      this.allTasks$ = this.taskService.getAllTasks();
+      this.allTasks$.subscribe(response => {
+        this.taskService.resetForNewSubscribe(response);
+        this.taskService.getSummaryInfos(response);
+        this.taskService.nextImportantDate.sort();
+      })
+      this.taskService.initAllTasks();
+    });
   }
+
 
   openDeleteDialog() {
     const dialogRef = this.dialog.open(DeleteTaskComponent);
-    dialogRef.componentInstance.taskId = this.taskId;
+    dialogRef.componentInstance.task = this.task;
   }
+
 
   openPushtoNextDialog() {
     const dialogRef = this.dialog.open(PushTaskComponent);
     dialogRef.componentInstance.task = this.task;
-    dialogRef.componentInstance.taskId = this.taskId;
   }
 
 }

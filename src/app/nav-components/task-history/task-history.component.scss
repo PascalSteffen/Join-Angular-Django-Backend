@@ -23,7 +23,7 @@ $colorLight: rgb(41, 171, 226);
 
   ::ng-deep .mat-progress-spinner circle,
   .mat-spinner circle {
-    stroke: $colorDark  !important;
+    stroke: $colorDark !important;
   }
 
 }
@@ -56,7 +56,7 @@ $colorLight: rgb(41, 171, 226);
 
         .name-categorie {
           transition: all 225ms ease-in-out;
-          background-color: $colorLight  !important;
+          background-color: $colorLight !important;
         }
       }
 
@@ -150,6 +150,10 @@ $colorLight: rgb(41, 171, 226);
 
   .no-task-message {
     text-align: center;
+  }
+
+  .task-container {
+    margin-left: 1.5rem !important;
   }
 }
 

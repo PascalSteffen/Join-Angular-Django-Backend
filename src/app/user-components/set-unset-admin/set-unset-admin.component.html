@@ -1,90 +1,76 @@
 <div class="tablet-mode">
-  <div *ngIf="authService.userData as user">
-    <div *ngFor="let currentUser of allUsers$ | async">
-      <div *ngIf="(user.uid == currentUser['userId'] && currentUser['admin']) && (this.userId && !ifAdmin) ">
-        <h1 mat-dialog-title>Manage User</h1>
-        <div mat-dialog-content>
-          <p>Do you really want to make <strong>{{username}}</strong> an admin?</p>
-        </div>
-        <div class="d-flex justify-content-between" mat-dialog-actions>
-          <button mat-flat-button mat-button mat-dialog-close>Cancel</button>
-          <button mat-flat-button color="warn" mat-button (click)="firebaseService.setAdmin(this.userId)"
-            [mat-dialog-close]="true">
-            <mat-icon class="me-2">admin_panel_settings</mat-icon>Set Admin
-          </button>
-        </div>
+  <div>
+    <div *ngIf="this.authenticationService.currentUserData?.is_staff && !this.user?.is_staff">
+      <h1 mat-dialog-title>Manage User</h1>
+      <div mat-dialog-content>
+        <p>Do you really want to make <strong>{{user.first_name}} {{user.last_name}}</strong> an admin?</p>
+      </div>
+      <div class="d-flex justify-content-between" mat-dialog-actions>
+        <button mat-flat-button mat-button mat-dialog-close>Cancel</button>
+        <button mat-flat-button color="warn" mat-button (click)="setAdmin()" [mat-dialog-close]="true">
+          <mat-icon class="me-2">admin_panel_settings</mat-icon>Set Admin
+        </button>
       </div>
     </div>
   </div>
 
-  <div *ngIf="authService.userData as user">
-    <div *ngFor="let currentUser of allUsers$ | async">
-      <div *ngIf="(user.uid == currentUser['userId'] && currentUser['admin']) && (this.userId && ifAdmin)">
-        <h1 mat-dialog-title>Manage User</h1>
-        <div mat-dialog-content>
-          <p>Do you really want to revoke <strong>{{username}}</strong> admin rights?</p>
-        </div>
-        <div class="d-flex justify-content-between" mat-dialog-actions>
-          <button mat-flat-button mat-button mat-dialog-close>Cancel</button>
-          <button mat-flat-button color="warn" mat-button (click)="firebaseService.unsetAdmin(this.userId)"
-            [mat-dialog-close]="true">
-            <mat-icon class="me-2">admin_panel_settings</mat-icon>Unset Admin
-          </button>
-        </div>
+  <div>
+    <div *ngIf="this.authenticationService.currentUserData?.is_staff && this.user?.is_staff">
+      <h1 mat-dialog-title>Manage User</h1>
+      <div mat-dialog-content>
+        <p>Do you really want to revoke <strong>{{user.first_name}} {{user.last_name}}</strong> admin rights?</p>
+      </div>
+      <div class="d-flex justify-content-between" mat-dialog-actions>
+        <button mat-flat-button mat-button mat-dialog-close>Cancel</button>
+        <button mat-flat-button color="warn" mat-button (click)="unsetAdmin()" [mat-dialog-close]="true">
+          <mat-icon class="me-2">admin_panel_settings</mat-icon>Unset Admin
+        </button>
       </div>
     </div>
   </div>
 </div>
 
 <div class="mobile-mode">
-  <div *ngIf="authService.userData as user">
-    <div *ngFor="let currentUser of allUsers$ | async">
-      <div *ngIf="(user.uid == currentUser['userId'] && currentUser['admin']) && (this.userId && !ifAdmin) ">
-        <h1 mat-dialog-title>Manage User</h1>
-        <div mat-dialog-content>
-          <p>Do you really want to make <strong>{{username}}</strong> an admin?</p>
-        </div>
-        <div class="d-flex justify-content-between" mat-dialog-actions>
-          <button mat-flat-button mat-button mat-dialog-close>
-            <mat-icon>close</mat-icon>
-          </button>
-          <button mat-flat-button color="warn" mat-button (click)="firebaseService.setAdmin(this.userId)"
-            [mat-dialog-close]="true">
-            <mat-icon>admin_panel_settings</mat-icon>
-          </button>
-        </div>
+  <div>
+    <div *ngIf="this.authenticationService.currentUserData?.is_staff && !this.user?.is_staff ">
+      <h1 mat-dialog-title>Manage User</h1>
+      <div mat-dialog-content>
+        <p>Do you really want to make <strong>{{user.first_name}} {{user.last_name}}</strong> an admin?</p>
+      </div>
+      <div class="d-flex justify-content-between" mat-dialog-actions>
+        <button mat-flat-button mat-button mat-dialog-close>
+          <mat-icon>close</mat-icon>
+        </button>
+        <button mat-flat-button color="warn" mat-button (click)="setAdmin()" [mat-dialog-close]="true">
+          <mat-icon>admin_panel_settings</mat-icon>
+        </button>
       </div>
     </div>
   </div>
 
-  <div *ngIf="authService.userData as user">
-    <div *ngFor="let currentUser of allUsers$ | async">
-      <div *ngIf="(user.uid == currentUser['userId'] && currentUser['admin']) && (this.userId && ifAdmin)">
-        <h1 mat-dialog-title>Manage User</h1>
-        <div mat-dialog-content>
-          <p>Do you really want to revoke <strong>{{username}}</strong> admin rights?</p>
-        </div>
-        <div class="d-flex justify-content-between" mat-dialog-actions>
-          <button mat-flat-button mat-button mat-dialog-close>
-            <mat-icon>close</mat-icon>
-          </button>
-          <button mat-flat-button color="warn" mat-button (click)="firebaseService.unsetAdmin(this.userId)"
-            [mat-dialog-close]="true">
-            <mat-icon>admin_panel_settings</mat-icon>
-          </button>
-        </div>
+  <div>
+    <div *ngIf="this.authenticationService.currentUserData?.is_staff && this.user?.is_staff">
+      <h1 mat-dialog-title>Manage User</h1>
+      <div mat-dialog-content>
+        <p>Do you really want to revoke <strong>{{user.first_name}} {{user.last_name}}</strong> admin rights?</p>
+      </div>
+      <div class="d-flex justify-content-between" mat-dialog-actions>
+        <button mat-flat-button mat-button mat-dialog-close>
+          <mat-icon>close</mat-icon>
+        </button>
+        <button mat-flat-button color="warn" mat-button (click)="unsetAdmin()" [mat-dialog-close]="true">
+          <mat-icon>admin_panel_settings</mat-icon>
+        </button>
       </div>
     </div>
   </div>
 </div>
 
-<div *ngIf="authService.userData as user">
-  <div *ngFor="let currentUser of allUsers$ | async">
-    <div *ngIf="(user.uid == currentUser['userId'] && !currentUser['admin'])">
-      <h1 mat-dialog-title>Manage User</h1>
-      <div mat-dialog-content>
-        <p>You do not have enough rights to assign admin rights.</p>
-      </div>
+<div>
+  <div class="text-center" *ngIf="!this.authenticationService.currentUserData?.is_staff">
+    <h1 mat-dialog-title>Manage User</h1>
+    <div mat-dialog-content>
+      <p>You do not have enough rights to assign admin rights.</p>
     </div>
   </div>
 </div>

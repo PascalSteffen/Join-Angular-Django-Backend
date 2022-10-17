@@ -1,11 +1,7 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { environment } from 'src/environments/environment';
 
 import { EditUserComponent } from './edit-user.component';
 
@@ -16,9 +12,7 @@ describe('EditUserComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [EditUserComponent],
-      imports: [FormsModule, provideFirebaseApp(() => initializeApp(environment.firebase)),
-        provideFirestore(() => getFirestore()), AngularFireAuthModule,
-        AngularFireModule.initializeApp(environment.firebase), MatSnackBarModule]
+      imports: [FormsModule, HttpClientModule, MatSnackBarModule]
     })
       .compileComponents();
 

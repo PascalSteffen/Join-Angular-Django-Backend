@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { DocumentData, Firestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { AuthService } from 'src/app/shared/services/auth-service/auth.service';
+import { AuthenticationService } from 'src/app/shared/services/authentication-service/authentication.service';
 import { EditUserComponent } from 'src/app/user-components/edit-user/edit-user.component';
-import { FirebaseService } from '../../shared/services/firebase-service/firebase.service';
 import { TaskService } from '../../shared/services/task-service/task.service';
+import { Task } from 'src/app/shared/interfaces/task';
 
 @Component({
   selector: 'app-summary',
@@ -15,29 +14,28 @@ import { TaskService } from '../../shared/services/task-service/task.service';
 
 export class SummaryComponent implements OnInit {
 
-  public allTasks$: Observable<DocumentData[]>;
+  public allTasks$: Observable<Task[]>;
   currentTime: string;
   loading: boolean = false;
 
-  constructor(public firebaseService: FirebaseService,
-    public taskService: TaskService,
-    public authService: AuthService,
-    public firestore: Firestore,
-    public dialog: MatDialog) { }
+  constructor(public taskService: TaskService,
+    public dialog: MatDialog,
+    public authenticationService: AuthenticationService) { }
 
 
   ngOnInit(): void {
-    this.allTasks$ = this.firebaseService.getAllTasks();
-    this.allTasks$.subscribe(allTask => {
-      this.taskService.resetForNewSubscribe(allTask);
-      this.taskService.getSummaryInfos(allTask);
+    this.authenticationService.isAuthenticated();
+    this.allTasks$ = this.taskService.getAllTasks();
+    this.allTasks$.subscribe(response => {
+      this.taskService.resetForNewSubscribe(response);
+      this.taskService.getSummaryInfos(response);
       this.taskService.nextImportantDate.sort();
       setTimeout(() => {
         this.loading = true;
       }, 500);
     })
+    this.taskService.initAllTasks();
     this.currentDayTime();
-    this.firebaseService.initAllTasks();
   }
 
 

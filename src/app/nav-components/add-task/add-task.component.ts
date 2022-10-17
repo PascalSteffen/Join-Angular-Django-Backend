@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { DocumentData, Firestore } from '@angular/fire/firestore';
 import { FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { User } from 'src/app/shared/interfaces/AuthResData';
 import { Task } from 'src/app/shared/interfaces/task';
+import { AuthenticationService } from 'src/app/shared/services/authentication-service/authentication.service';
 import { TaskService } from 'src/app/shared/services/task-service/task.service';
-import { FirebaseService } from '../../shared/services/firebase-service/firebase.service';
+import { UserService } from 'src/app/shared/services/user-service/user.service';
+import { UtilityServiceService } from 'src/app/shared/services/utility-service/utility-service.service';
 
 @Component({
   selector: 'app-add-task',
@@ -20,18 +23,28 @@ export class AddTaskComponent implements OnInit {
   dueDateFormControl = new FormControl('', [Validators.required]);
   priorityFormControl = new FormControl('', [Validators.required]);
 
-  public allUsers$: Observable<DocumentData[]>;
+  public allUsers$: Observable<User[]>;
   task: Task = this.taskService.taskDefault();
   date: Date;
+  public allTasks: Object[]
 
-  constructor(public firebaseService: FirebaseService, public firestore: Firestore, public taskService: TaskService) { }
+  constructor(public userService: UserService,
+    public taskService: TaskService,
+    public authenticationService: AuthenticationService, public utilityService: UtilityServiceService, public router: Router) { }
 
 
   ngOnInit(): void {
-    this.allUsers$ = this.firebaseService.getAllUsers();
-    this.firebaseService.initAllUsers();
+    this.authenticationService.isAuthenticated();
+    this.allUsers$ = this.userService.getAllUsers();
+    this.userService.initAllUsers();
   }
 
+  createTask() {
+    this.taskService.createTask(this.task, this.date).subscribe(() => {
+      this.utilityService.alert('Task created successfully.', 5000);
+      this.router.navigate(['board']);
+    });
+  }
 
   /**
    * clear the form values.

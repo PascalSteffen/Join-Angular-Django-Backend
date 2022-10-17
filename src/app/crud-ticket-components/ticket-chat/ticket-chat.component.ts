@@ -1,11 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { collection, doc, DocumentData, Firestore, getDoc } from '@angular/fire/firestore';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthService } from 'src/app/shared/services/auth-service/auth.service';
-import { FirebaseService } from 'src/app/shared/services/firebase-service/firebase.service';
+import { Message } from 'src/app/shared/interfaces/message';
+import { Ticket } from 'src/app/shared/interfaces/ticket';
+import { AuthenticationService } from 'src/app/shared/services/authentication-service/authentication.service';
+import { MessageService } from 'src/app/shared/services/message-service/message.service';
 import { TicketService } from 'src/app/shared/services/ticket-service/ticket.service';
 import { UtilityServiceService } from 'src/app/shared/services/utility-service/utility-service.service';
 import { DeleteChatMessageComponent } from '../delete-chat-message/delete-chat-message.component';
@@ -21,88 +22,77 @@ export class TicketChatComponent implements OnInit {
 
   descriptionFormControl = new FormControl('', [Validators.required]);
 
-  public allUsers$: Observable<DocumentData[]>
-  ticket: any = this.ticketService.ticketDefault();
+  public allTicketMessages$: Observable<Message[]>;
   allChatMessages: Object[] = [];
+  ticket: Ticket[];
+
   ticketId: string;
   newMessage: string;
-  currentDate = new Date().getTime();
   loading: boolean = false;
 
 
   constructor(private route: ActivatedRoute,
-    public firebaseService: FirebaseService,
     public ticketService: TicketService,
-    public authService: AuthService,
     public dialog: MatDialog,
-    public firestore: Firestore,
-    public utilityService: UtilityServiceService) { }
+    public utilityService: UtilityServiceService,
+    public authenticationService: AuthenticationService,
+    public messageService: MessageService,
+    public router: Router) { }
 
 
   ngOnInit(): void {
+    this.authenticationService.isAuthenticated();
     this.route.paramMap.subscribe(async (paramMap) => {
       this.ticketId = paramMap.get('id');
-      await this.getTicket();
-      this.messageIteration();
+      this.getCurrentTicket()
+      this.updateMessages();
       setTimeout(() => {
         this.loading = true;
       }, 500);
     })
-    this.allUsers$ = this.firebaseService.getAllUsers();
-    this.firebaseService.initAllUsers();
     this.scrollToBottom();
   }
 
 
-  /**
-   * get the current Ticket
-   *
-   */
-  async getTicket() {
-    const coll = collection(this.firestore, 'tickets');
-    const docRef = doc(coll, this.ticketId);
-    const docSnap = await getDoc(docRef)
-    this.ticket = docSnap.data()['ticket'];
+  getCurrentTicket() {
+    this.ticketService.getCurrentTicket(this.ticketId).subscribe(currentTicket => {
+      this.ticket = currentTicket
+    })
   }
 
 
-  /**
-   * get all messages from DB.
-   */
-  async messageIteration() {
-    this.allChatMessages = [];
-    for (let i = 0; i < this.ticket['messages'].length; i++) {
-      const allMessages = this.ticket['messages'][i];
-      this.allChatMessages.push(allMessages)
-    }
+  deleteTicket() {
+    this.ticketService.deleteTicket(this.ticketId).subscribe(() => {
+      this.utilityService.alert('Ticket closed successfully.', 5000);
+      this.router.navigate(['tickets']);
+    })
   }
 
 
-  /**
-   * update and push ne messages.
-   * @param user
-   * @param message
-   */
-  async newMessages(user: string, message: string) {
-    let newMessage = {
-      date: this.currentDate,
-      from: user,
-      message: message
-    }
-    this.allChatMessages.push(newMessage);
-    this.firebaseService.updateTicket(this.ticketId, this.currentDate, this.ticket, this.allChatMessages);
-    this.newMessage = '';
-    await this.getTicket();
+  createMessage() {
+    this.messageService.createMessage(this.newMessage, this.ticketId).subscribe(() => {
+      this.newMessage = '';
+      this.getCurrentTicket();
+      this.updateMessages();
+    })
   }
 
 
-  /**
-   * update the current Admin to ticket.
-   * @param currentAdmin
-   */
-  async assignToAdmin(currentAdmin: string) {
-    this.firebaseService.updateAssignTo(this.ticketId, this.ticket, currentAdmin);
-    await this.getTicket();
+  updateMessages() {
+    this.allTicketMessages$ = this.messageService.getAllTicketMessages();
+    this.allTicketMessages$.subscribe(response => {
+      this.allChatMessages = response;
+    })
+    this.messageService.initAllTicketMessages(this.ticketId);
+  }
+
+
+  assignToAdmin() {
+    this.ticketService.assignTicket(this.ticketId).subscribe(() => {
+      this.utilityService.alert('You have successfully accepted the ticket.', 5000);
+      this.getCurrentTicket()
+    })
+
   }
 
 
@@ -126,15 +116,17 @@ export class TicketChatComponent implements OnInit {
   }
 
 
+  firstTicketMessageAlert() {
+    this.utilityService.alert('The message created on the ticket cannot be deleted.', 5000);
+  }
+
+
   openDeleteMessageDialog(message: Object) {
     const dialogRef = this.dialog.open(DeleteChatMessageComponent);
     dialogRef.componentInstance.message = message;
-    dialogRef.componentInstance.ticket = this.ticket;
-    dialogRef.componentInstance.ticketId = this.ticketId;
-    dialogRef.componentInstance.currentDate = this.currentDate;
-    dialogRef.afterClosed().subscribe(async (result) => {
-      await this.getTicket();
-      this.messageIteration();
+    dialogRef.afterClosed().subscribe(() => {
+      this.getCurrentTicket();
+      this.updateMessages();
     });
   }
 

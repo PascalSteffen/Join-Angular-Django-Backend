@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { DocumentData } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { CreateTicketComponent } from 'src/app/crud-ticket-components/create-ticket/create-ticket.component';
-import { TicketChatComponent } from 'src/app/crud-ticket-components/ticket-chat/ticket-chat.component';
-import { AuthService } from 'src/app/shared/services/auth-service/auth.service';
-import { FirebaseService } from 'src/app/shared/services/firebase-service/firebase.service';
+import { Ticket } from 'src/app/shared/interfaces/ticket';
+import { AuthenticationService } from 'src/app/shared/services/authentication-service/authentication.service';
 import { TicketService } from 'src/app/shared/services/ticket-service/ticket.service';
+import { UserService } from 'src/app/shared/services/user-service/user.service';
 import { UtilityServiceService } from 'src/app/shared/services/utility-service/utility-service.service';
 
 @Component({
@@ -18,57 +17,50 @@ import { UtilityServiceService } from 'src/app/shared/services/utility-service/u
 
 export class TicketSystemComponent implements OnInit {
 
-  public allTickets$: Observable<DocumentData[]>;
-  public allUsers$: Observable<DocumentData[]>;
+  public allTickets$: Observable<Ticket[]>;
   name: string;
-  currentTicketNumber: number = 1;
   loading: boolean = false;
 
   constructor(public dialog: MatDialog,
-    public firebaseService: FirebaseService,
+    public userService: UserService,
     public ticketService: TicketService,
-    public authService: AuthService,
     public router: Router,
-    public utilityService: UtilityServiceService) { }
+    public utilityService: UtilityServiceService,
+    public authenticationService: AuthenticationService) { }
 
   ngOnInit(): void {
-    this.allUsers$ = this.firebaseService.getAllUsers();
-    this.firebaseService.initAllUsers();
-    this.allTickets$ = this.firebaseService.getAllTickets();
+    this.authenticationService.isAuthenticated();
+    this.allTickets$ = this.ticketService.getAllTickets();
     this.allTickets$.subscribe(allTickets => {
-      this.currentTicketNumber = allTickets.length;
+      this.ticketService.allTicketsLength = allTickets.length;
       setTimeout(() => {
         this.loading = true;
       }, 500);
     })
-    this.firebaseService.initAllTickets();
+    this.ticketService.initAllTickets();
   }
 
 
   openCreateTicketDialog() {
     const dialogRef = this.dialog.open(CreateTicketComponent);
-    dialogRef.componentInstance.currentTicketNumber = this.currentTicketNumber;
-  }
-
-
-  openTicketChatDialog(ticket: Object) {
-    const dialogRef = this.dialog.open(TicketChatComponent);
-    dialogRef.componentInstance.ticketId = ticket['ticketId'];
-    dialogRef.componentInstance.ticket = ticket['ticket'];
+    dialogRef.afterClosed().subscribe(() => {
+      this.allTickets$ = this.ticketService.getAllTickets();
+      this.allTickets$.subscribe(allTickets => {
+        this.ticketService.allTicketsLength = allTickets.length;
+      })
+      this.ticketService.initAllTickets();
+    });
   }
 
 
   /**
    * open current ticket. A admin can open all tickets, but not a normal user.
    * @param ticketUser
-   * @param currentUser
-   * @param currentUserId
-   * @param userId
-   * @param admin
    * @param ticketRoute
    */
-  openTicket(ticketUser: string, currentUser: string, currentUserId: string, userId: string, admin: string, ticketRoute: string) {
-    if (ticketUser == currentUser || currentUserId == userId && admin) {
+  openTicket(ticketUser: string, ticketRoute: string) {
+    if (ticketUser == this.authenticationService.currentUserData.username ||
+      this.authenticationService.currentUserData.username && this.authenticationService.currentUserData.is_staff) {
       this.router.navigate(['tickets/' + ticketRoute], {
         skipLocationChange: true
       });

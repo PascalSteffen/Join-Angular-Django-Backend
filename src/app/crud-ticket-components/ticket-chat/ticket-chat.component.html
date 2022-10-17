@@ -1,19 +1,21 @@
-<div *ngIf="authService.userData as user">
+<div>
   <div class="row d-flex align-items-center top-container">
     <h1 class="col-md-auto">Support</h1>
     <h1 class="col-md-auto color cut">|</h1>
     <div *ngIf="loading" class="d-flex col align-items-center mobile">
-      <h2 class="col-md-auto">Ticket from {{ticket.from}}</h2>
-      <div *ngFor="let currentUser of allUsers$ | async">
-        <button *ngIf="user.uid == currentUser['userId'] && currentUser['admin']" [matMenuTriggerFor]="ticketOptions"
-          matTooltip="Ticket options" class="col-md-auto mb-2 ms-3" mat-mini-fab color="warn"
-          aria-label="Example icon button with a filter list icon">
+      <h2 class="col-md-auto">Ticket from {{ticket['from_user']['first_name']}} {{ticket['from_user']['last_name']}}
+      </h2>
+      <div>
+        <button
+          *ngIf="this.authenticationService.currentUserData['username'] && this.authenticationService.currentUserData['is_staff']"
+          [matMenuTriggerFor]="ticketOptions" matTooltip="Ticket options" class="col-md-auto mb-2 ms-3" mat-mini-fab
+          color="warn" aria-label="Example icon button with a filter list icon">
           <mat-icon>settings</mat-icon>
         </button>
         <mat-menu #ticketOptions="matMenu">
-          <button (click)="assignToAdmin(user.displayName)" mat-menu-item>Assign to
+          <button (click)="assignToAdmin()" mat-menu-item>Assign to
             me</button>
-          <button class="isAdmin" (click)="firebaseService.deleteTicket(ticketId)" mat-menu-item>Close ticket</button>
+          <button class="isAdmin" (click)="deleteTicket()" mat-menu-item>Close ticket</button>
         </mat-menu>
       </div>
     </div>
@@ -27,28 +29,43 @@
     <div class=" chat-container">
 
       <div class="col info border-bottom">
-        <h3>Ticket was created by <strong>{{ticket.from}}</strong></h3>
-        <h3>Assigned to <strong class="isAdmin me-3">{{ticket.assignTo}}</strong></h3>
+        <h3>Ticket was created by <strong>{{ticket['from_user']['first_name']}}
+            {{ticket['from_user']['last_name']}}</strong></h3>
+        <h3 *ngIf="ticket['assigned_to'] !== null">Assigned to <strong
+            class="isAdmin me-3">{{ticket['assigned_to']['first_name']}} {{ticket['assigned_to']['last_name']}}</strong>
+        </h3>
+        <h3 *ngIf="ticket['assigned_to'] == null"><strong class="isAdmin me-3">Ticket not assigned</strong>
+        </h3>
       </div>
 
       <div #scrollMe class="col all-message-container">
-        <div *ngFor="let message of ticket.messages"
-          (click)="user.displayName == message.from && openDeleteMessageDialog(message)">
-          <div (click)="user.displayName !== message.from && showNoYourMessageAlert()" class="mb-2 text-message mx-3">
-            <h3><strong class="color">{{message.from}}</strong> | {{message.date | date: 'M/d/yy, h:mm a'}}</h3>
-            <span>{{message.message}}</span>
+        <div (click)="firstTicketMessageAlert()" class="mb-2 text-message mx-3">
+          <h3><strong class="color">{{ticket['from_user']['first_name']}} {{ticket['from_user']['last_name']}}</strong>
+            |
+            {{ticket['date'] | date: 'MMM d, y, h:mm a'}}</h3>
+          <span>{{ticket['ticket_message']}}</span>
+        </div>
+        <div *ngFor="let message of allChatMessages"
+          (click)="this.authenticationService.currentUserData['username'] == message['from_user']['username'] && openDeleteMessageDialog(message)">
+          <div
+            (click)="this.authenticationService.currentUserData['username'] !== message['from_user']['username'] && showNoYourMessageAlert()"
+            class="mb-2 text-message mx-3">
+            <h3><strong class="color">{{message['from_user']['first_name']}}
+                {{message['from_user']['last_name']}}</strong> |
+              {{message['date'] | date: 'MMM d, y, h:mm a'}}</h3>
+            <span>{{message['chat_message']}}</span>
           </div>
         </div>
       </div>
 
       <form #myForm="ngForm" action="">
-        <div *ngIf="authService.userData as user">
+        <div>
           <div class="chat-message-container d-flex align-items-end">
             <textarea required type="text" name="description" [(ngModel)]="newMessage" pattern="[a-zA-Z0-9-.,+?! \-_.\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u00FF
           ]*" matInput></textarea>
             <div class="btn-design">
-              <button [disabled]="myForm.invalid" (click)="newMessages(user.displayName, newMessage)" mat-icon-button
-                color="primary" aria-label="Example icon button with a home icon">
+              <button [disabled]="myForm.invalid" (click)="createMessage()" mat-icon-button color="primary"
+                aria-label="Example icon button with a home icon">
                 <mat-icon>send</mat-icon>
               </button>
             </div>

@@ -5,6 +5,12 @@ $colorLight: rgb(41, 171, 226);
   background-color: $colorDark;
 }
 
+.form-container {
+  .mat-form-field {
+    width: 100% !important;
+  }
+}
+
 @media(max-width: 400px) {
   .mobile {
     display: flex;

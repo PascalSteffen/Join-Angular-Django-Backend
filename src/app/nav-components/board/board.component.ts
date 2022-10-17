@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { DocumentData, Firestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { FirebaseService } from '../../shared/services/firebase-service/firebase.service';
 import { TaskService } from '../../shared/services/task-service/task.service';
 import { TaskDetailComponent } from '../../crud-task-components/task-detail/task-detail.component';
+import { AuthenticationService } from 'src/app/shared/services/authentication-service/authentication.service';
+import { Task } from 'src/app/shared/interfaces/task';
 
 @Component({
   selector: 'app-board',
@@ -14,36 +14,34 @@ import { TaskDetailComponent } from '../../crud-task-components/task-detail/task
 
 export class BoardComponent implements OnInit {
 
-  public allTasks$: Observable<DocumentData[]>;
-  date: number;
+  public allTasks$: Observable<Task[]>;
+  date: Date;
   searchTodo: string;
   loading: boolean = false;
 
-  constructor(public firebaseService: FirebaseService,
-    public taskService: TaskService,
-    public firebase: FirebaseService,
-    public firestore: Firestore,
-    public dialog: MatDialog) { }
+  constructor(public taskService: TaskService,
+    public dialog: MatDialog,
+    public authenticationService: AuthenticationService) { }
 
 
   ngOnInit(): void {
-    this.allTasks$ = this.firebaseService.getAllTasks();
-    this.allTasks$.subscribe(allTask => {
-      this.taskService.resetForNewSubscribe(allTask);
-      this.taskService.getSummaryInfos(allTask);
+    this.authenticationService.isAuthenticated();
+    this.allTasks$ = this.taskService.getAllTasks();
+    this.allTasks$.subscribe(response => {
+      this.taskService.resetForNewSubscribe(response);
+      this.taskService.getSummaryInfos(response);
       this.taskService.nextImportantDate.sort();
       setTimeout(() => {
         this.loading = true;
       }, 500);
     })
-    this.firebaseService.initAllTasks();
+    this.taskService.initAllTasks();
   }
 
 
-  openDialog(task: Object) {
+  openDialog(task: Task) {
     const dialogRef = this.dialog.open(TaskDetailComponent);
-    dialogRef.componentInstance.task = task['task'];
-    dialogRef.componentInstance.taskId = task['taskId'];
+    dialogRef.componentInstance.task = task;
   }
 
 }

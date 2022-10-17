@@ -1,4 +1,4 @@
-<div class="form-container" *ngIf="authService.userData as user">
+<div class="form-container">
   <h1 class="d-flex justify-content-center" mat-dialog-title>Create a new Event</h1>
   <form #myForm="ngForm" action="" class="mt-2rem">
     <div class="row row-lines">
@@ -16,7 +16,7 @@
       <div class="col-md-auto">
         <mat-form-field class="my-1" appearance="outline">
           <mat-label>Start date</mat-label>
-          <input name="startDate" [(ngModel)]="startDate" matInput placeholder="dd/mm/yyyy" [matDatepicker]="picker1"
+          <input name="startDate" [(ngModel)]="start_date" matInput placeholder="dd/mm/yyyy" [matDatepicker]="picker1"
             required>
           <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
           <mat-datepicker #picker1></mat-datepicker>
@@ -29,7 +29,7 @@
       <div class="col-md-auto">
         <mat-form-field class="my-1" appearance="outline">
           <mat-label>End date</mat-label>
-          <input name="endDate" [(ngModel)]="endDate" matInput placeholder="dd/mm/yyyy" [matDatepicker]="picker2"
+          <input name="endDate" [(ngModel)]="end_date" matInput placeholder="dd/mm/yyyy" [matDatepicker]="picker2"
             required>
           <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
           <mat-datepicker #picker2></mat-datepicker>
@@ -57,8 +57,7 @@
     <div class="border"></div>
     <div class="mt-4 d-flex justify-content-end">
       <button [mat-dialog-close]="true" matTooltip="Create Calendar Event" [disabled]="!myForm.valid"
-        (click)="firebaseService.saveCalendarEvent(this.calendarEvent, this.startDate, user.displayName, this.endDate)"
-        type="submit" mat-flat-button color="primary">Add Event</button>
+        (click)="createEvent()" type="submit" mat-flat-button color="primary">Add Event</button>
     </div>
   </form>
 </div>

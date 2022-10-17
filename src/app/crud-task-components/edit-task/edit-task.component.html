@@ -28,7 +28,7 @@
   <div class="mobile">
     <mat-form-field class="my-1 me-2 no-margin" appearance="outline">
       <mat-label>Categorie</mat-label>
-      <mat-select name="categorie" [(ngModel)]="task.categorie" required>
+      <mat-select name="categorie" [(ngModel)]="task.category" required>
         <mat-option value="Sales">Sales</mat-option>
         <mat-option value="Backoffice">Backoffice</mat-option>
         <mat-option value="Marketing">Marketing</mat-option>
@@ -40,8 +40,8 @@
 
     <mat-form-field class="my-1" appearance="outline">
       <mat-label>Assigned to</mat-label>
-      <mat-select name="assignTo" [(ngModel)]="task.assignTo" required>
-        <mat-option *ngFor="let user of allUsers$ | async" value="{{user['displayName']}}">{{user['displayName']}}
+      <mat-select name="assignTo" [(ngModel)]="task.assigned_to.username" required>
+        <mat-option *ngFor="let user of allUsers$ | async" value="{{user['username']}}">{{user['username']}}
         </mat-option>
       </mat-select>
       <mat-error *ngIf="assignToFormControl.hasError('required')">
@@ -52,7 +52,7 @@
 
   <div>
     <mat-form-field class="my-1 full-width" appearance="outline">
-      <mat-label>{{task.date | date:'MMMM d, y'}}</mat-label>
+      <mat-label>{{task.upcoming_deadline | date:'MMMM d, y'}}</mat-label>
       <input name="date" [(ngModel)]="date" matInput placeholder="dd/mm/yyyy" [matDatepicker]="picker1" required>
       <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
       <mat-datepicker #picker1></mat-datepicker>
@@ -81,8 +81,7 @@
       <mat-icon class="me-2">close</mat-icon>Close
     </button>
     <button mat-flat-button color="primary" [class.btnDisabled]="!myForm.valid" [disabled]="!myForm.valid"
-      [mat-dialog-close]="myForm" (click)="firebaseService.updateTask(this.taskId, this.date, this.task)" type="submit"
-      class="submit-btn-design">
+      [mat-dialog-close]="myForm" (click)="updateTask()" type="submit" class="submit-btn-design">
       <mat-icon class="me-2">sync_alt</mat-icon>Update Task
     </button>
   </mat-dialog-actions>

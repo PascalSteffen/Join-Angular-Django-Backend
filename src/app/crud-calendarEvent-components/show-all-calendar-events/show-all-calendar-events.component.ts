@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarEventService } from 'src/app/shared/services/calendarEvent-service/calendar-event.service';
-import { FirebaseService } from 'src/app/shared/services/firebase-service/firebase.service';
-import { DocumentData } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { DeleteCalendarEventComponent } from '../delete-calendar-event/delete-calendar-event.component';
 import { UtilityServiceService } from 'src/app/shared/services/utility-service/utility-service.service';
-import { AuthService } from 'src/app/shared/services/auth-service/auth.service';
+import { AuthenticationService } from 'src/app/shared/services/authentication-service/authentication.service';
 
 @Component({
   selector: 'app-show-all-calendar-events',
@@ -16,22 +14,22 @@ import { AuthService } from 'src/app/shared/services/auth-service/auth.service';
 
 export class ShowAllCalendarEventsComponent implements OnInit {
 
-  public allCalendarEvents$: Observable<DocumentData[]>;
+  public allCalendarEvents$: Observable<Object[]>;
 
   constructor(public calendarEventService: CalendarEventService,
-    public firebaseService: FirebaseService,
+    public authenticationService: AuthenticationService,
     public dialog: MatDialog,
-    public utilityService: UtilityServiceService,
-    public authService: AuthService) { }
+    public utilityService: UtilityServiceService) { }
 
   ngOnInit(): void {
-    this.allCalendarEvents$ = this.firebaseService.getAllCalendarEvents();
-    this.firebaseService.initAllCalendarEvents();
+    this.authenticationService.isAuthenticated();
+    this.allCalendarEvents$ = this.calendarEventService.getAllCalendarEvents();
+    this.calendarEventService.initAllCalendarEvents();
   }
 
   openDeleteEventDialog(event: Object) {
     const dialogRef = this.dialog.open(DeleteCalendarEventComponent);
-    dialogRef.componentInstance.eventId = event['eventId'];
+    dialogRef.componentInstance.calendarEvent = event;
   }
 
   showNoYourEventAlert() {

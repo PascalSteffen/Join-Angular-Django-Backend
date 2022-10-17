@@ -1,4 +1,4 @@
-<app-main-content *ngIf="authService.isLoggedIn"></app-main-content>
-<div *ngIf="!authService.isLoggedIn">
+<app-main-content *ngIf="authenticationService.isLoggedInNow"></app-main-content>
+<div *ngIf="!authenticationService.isLoggedInNow">
   <router-outlet></router-outlet>
 </div>

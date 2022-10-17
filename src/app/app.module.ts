@@ -21,10 +21,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { environment } from '../environments/environment';
-import { provideAuth, getAuth } from '@angular/fire/auth';
-import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { TaskFilterPipe } from './shared/pipes/filter-pipes/task-filter.pipe';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -37,12 +33,6 @@ import { SearchfilterPipe } from './shared/pipes/filter-pipes/searchfilter.pipe'
 import { SignInComponent } from './auth-components/sign-in/sign-in.component';
 import { SignUpComponent } from './auth-components/sign-up/sign-up.component';
 import { ForgotPasswordComponent } from './auth-components/forgot-password/forgot-password.component';
-import { AuthService } from "./shared/services/auth-service/auth.service";
-import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
-import { AngularFireStorageModule } from '@angular/fire/compat/storage';
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { MainContentComponent } from './main-content/main-content.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { EditUserComponent } from './user-components/edit-user/edit-user.component';
@@ -66,6 +56,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { EventDetailComponent } from './crud-calendarEvent-components/event-detail/event-detail.component';
 import { ShowAllCalendarEventsComponent } from './crud-calendarEvent-components/show-all-calendar-events/show-all-calendar-events.component';
 import { DeleteCalendarEventComponent } from './crud-calendarEvent-components/delete-calendar-event/delete-calendar-event.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -103,6 +94,7 @@ import { DeleteCalendarEventComponent } from './crud-calendarEvent-components/de
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     MatRadioModule,
     MatBadgeModule,
     MatCardModule,
@@ -124,20 +116,12 @@ import { DeleteCalendarEventComponent } from './crud-calendarEvent-components/de
     MatSidenavModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAuthModule,
-    AngularFirestoreModule,
-    AngularFireStorageModule,
-    AngularFireDatabaseModule,
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()),
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory,
     }),
   ],
-  providers: [AuthService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

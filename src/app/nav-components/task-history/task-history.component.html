@@ -22,53 +22,51 @@
   <div class="board-container d-flex">
     <div (click)="openDialog(task)"
       *ngFor="let task of allTasks$ | async | taskFilter:taskService.findHistoryTask | searchfilter:searchTodo | sortBy: 'priority'"
-      class="task-container my-3">
-
+      class="task-container my-3 me-4">
 
       <div class="px-3 py-3 d-flex row mx-0 mobile-categories">
 
         <div class="d-flex justify-content-center name-categorie col my-2 mx-2">
-          <span>{{task['task'].assignTo}}</span>
+          <span>{{task.assigned_to.first_name}} {{task.assigned_to.last_name}}</span>
         </div>
 
-        <div *ngIf="task['task'].categorie == 'Sales'"
-          class="d-flex justify-content-center sales-categorie col my-2 mx-2">
-          <span>{{task['task'].categorie}}</span>
+        <div *ngIf="task.category == 'Sales'" class="d-flex justify-content-center sales-categorie col my-2 mx-2">
+          <span>{{task.category}}</span>
         </div>
 
-        <div *ngIf="task['task'].categorie == 'Backoffice'"
+        <div *ngIf="task.category == 'Backoffice'"
           class="d-flex justify-content-center backoffice-categorie col my-2 mx-2">
-          <span>{{task['task'].categorie}}</span>
+          <span>{{task.category}}</span>
         </div>
 
-        <div *ngIf="task['task'].categorie == 'Marketing'"
+        <div *ngIf="task.category == 'Marketing'"
           class="d-flex justify-content-center marketing-categorie col my-2 mx-2">
-          <span>{{task['task'].categorie}}</span>
+          <span>{{task.category}}</span>
         </div>
       </div>
 
       <div class="row title-description-container d-flex flex-column col my-2 mx-2">
-        <h3 class="col wrap-text">{{task['task'].title}}</h3>
-        <span class="col wrap-text">{{task['task'].description}}</span>
+        <h3 class="col wrap-text">{{task.title}}</h3>
+        <span class="col wrap-text">{{task.description}}</span>
       </div>
 
       <div class="row px-3 py-3 mobile-change">
         <div class="col d-flex flex-column">
           <span class="color">Upcoming Deadline</span>
-          <span>{{task['task'].date | date:'MMMM d, y'}}</span>
+          <span>{{task.upcoming_deadline | date:'MMMM d, y'}}</span>
         </div>
 
         <div class="row col d-flex align-items-end">
           <div class="d-flex align-items-center flex-column">
             <span class="color">Priority</span>
-            <mat-icon class="urgent-priority" *ngIf="task['task'].priority == 'Urgent'">
+            <mat-icon class="urgent-priority" *ngIf="task.priority == 'Urgent'">
               keyboard_double_arrow_up
             </mat-icon>
 
-            <mat-icon class="medium-priority" *ngIf="task['task'].priority == 'Medium'">drag_handle
+            <mat-icon class="medium-priority" *ngIf="task.priority == 'Medium'">drag_handle
             </mat-icon>
 
-            <mat-icon class="low-priority" *ngIf="task['task'].priority == 'Low'">keyboard_double_arrow_down
+            <mat-icon class="low-priority" *ngIf="task.priority == 'Low'">keyboard_double_arrow_down
             </mat-icon>
           </div>
         </div>

@@ -18,7 +18,7 @@
     <div class="col-md-auto">
       <mat-form-field class="my-2" appearance="outline">
         <mat-label>Categorie</mat-label>
-        <mat-select name="categorie" [(ngModel)]="task.categorie" required>
+        <mat-select name="categorie" [(ngModel)]="task.category" required>
           <mat-option value="Sales">Sales</mat-option>
           <mat-option value="Backoffice">Backoffice</mat-option>
           <mat-option value="Marketing">Marketing</mat-option>
@@ -62,8 +62,8 @@
     <div class="col-md-auto">
       <mat-form-field class="my-2" appearance="outline">
         <mat-label>Assigned to</mat-label>
-        <mat-select name="assignTo" [(ngModel)]="task.assignTo" required>
-          <mat-option *ngFor="let user of allUsers$ | async" value="{{user['displayName']}}">{{user['displayName']}}
+        <mat-select name="assignTo" [(ngModel)]="task.assigned_to" required>
+          <mat-option *ngFor="let user of allUsers$ | async" value="{{user['username']}}">{{user['username']}}
           </mat-option>
         </mat-select>
         <mat-error *ngIf="assignToFormControl.hasError('required')">
@@ -86,9 +86,8 @@
   <div class="border container-width"></div>
   <div class="my-4">
     <button (click)="clearForm(myForm)" class="me-3" mat-stroked-button>Clear</button>
-    <button [class.btnDisabled]="!myForm.valid" [disabled]="!myForm.valid"
-      (click)="firebaseService.saveTask(this.task, this.date, myForm)" type="submit" class="submit-btn-design"
-      mat-flat-button color="primary">Add
+    <button [class.btnDisabled]="!myForm.valid" [disabled]="!myForm.valid" (click)="createTask()" type="submit"
+      class="submit-btn-design" mat-flat-button color="primary">Add
       Task</button>
   </div>
 </form>

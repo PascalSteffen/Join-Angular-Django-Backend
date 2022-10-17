@@ -1,4 +1,6 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { PrivacyComponent } from './privacy.component';
 
@@ -8,9 +10,10 @@ describe('PrivacyComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PrivacyComponent ]
+      declarations: [PrivacyComponent],
+      imports: [HttpClientModule, MatSnackBarModule]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(PrivacyComponent);
     component = fixture.componentInstance;

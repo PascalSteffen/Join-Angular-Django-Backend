@@ -13,7 +13,6 @@ export class UtilityServiceService {
   /**
   * alert for user-actions
   * @param message
-  *
   */
   alert(message: string, time: number) {
     this._snackBar.open(message, '', {

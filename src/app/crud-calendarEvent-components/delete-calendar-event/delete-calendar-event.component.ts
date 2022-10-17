@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FirebaseService } from 'src/app/shared/services/firebase-service/firebase.service';
+import { Observable } from 'rxjs';
+import { AuthenticationService } from 'src/app/shared/services/authentication-service/authentication.service';
+import { CalendarEventService } from 'src/app/shared/services/calendarEvent-service/calendar-event.service';
+import { UtilityServiceService } from 'src/app/shared/services/utility-service/utility-service.service';
 
 @Component({
   selector: 'app-delete-calendar-event',
@@ -8,13 +11,25 @@ import { FirebaseService } from 'src/app/shared/services/firebase-service/fireba
 })
 
 export class DeleteCalendarEventComponent implements OnInit {
+  public allCalendarEvents$: Observable<Object[]>;
 
-  eventId: string;
+  calendarEvent: Object;
 
-  constructor(public firebaseService: FirebaseService) { }
+  constructor(public calendarEventService: CalendarEventService,
+    public utilityService: UtilityServiceService,
+    public authenticationService: AuthenticationService) { }
 
   ngOnInit(): void {
+    this.authenticationService.isAuthenticated();
+  }
 
+
+  deleteEvent() {
+    this.calendarEventService.deleteEvent(this.calendarEvent['id']).subscribe(() => {
+      this.allCalendarEvents$ = this.calendarEventService.getAllCalendarEvents();
+      this.calendarEventService.initAllCalendarEvents();
+      this.utilityService.alert('Event deleted successfully.', 5000)
+    })
   }
 
 }

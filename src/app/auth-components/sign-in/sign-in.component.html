@@ -6,20 +6,34 @@
     <h1 class="my-2">Sign In</h1>
     <form class="form-class" action="">
 
-      <mat-form-field class="my-2" appearance="outline">
+      <!--       <mat-form-field class="my-2" appearance="outline">
         <mat-label>Email</mat-label>
-        <input type="email" #userEmail matInput [formControl]="emailFormControl" placeholder="Email">
+        <input type="email" #userEmail matInput [formControl]="emailFormControl" [(ngModel)]="userdata.username"
+          placeholder="Email">
         <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
           Please enter a valid email address
         </mat-error>
         <mat-error *ngIf="emailFormControl.hasError('required')">
           Email is <strong>required</strong>
         </mat-error>
+      </mat-form-field> -->
+
+      <mat-form-field class="my-2" appearance="outline">
+        <mat-label>Username</mat-label>
+        <input type="text" matInput [formControl]="passwordFormControl" [(ngModel)]="userdata.username"
+          placeholder="Username">
+        <mat-error *ngIf="passwordFormControl.hasError('email') && !emailFormControl.hasError('required')">
+          Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="passwordFormControl.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Enter your password</mat-label>
-        <input matInput [type]="hide ? 'password' : 'text'" [formControl]="passwordFormControl" #userPassword required>
+        <input matInput [type]="hide ? 'password' : 'text'" [formControl]="passwordFormControl"
+          [(ngModel)]="userdata.password" #userPassword required>
         <button mat-icon-button matSuffix (click)="hide = !hide">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
@@ -31,21 +45,22 @@
         </mat-error>
       </mat-form-field>
 
-      <div routerLink="/forgot-password" class="d-flex justify-content-center">
+      <!--       <div routerLink="/forgot-password" class="d-flex justify-content-center">
         <h3>Forgot my password</h3>
-      </div>
+      </div> -->
 
       <div class="d-flex justify-content-center">
         <button matTooltip="Normal sign in" matTooltipPosition="right"
-          (click)="authService.SignIn(userEmail.value, userPassword.value)" type="submit" class="submit-btn-design"
+          (click)="authenticationService.loginUser(this.userdata)" type="submit" class="submit-btn-design"
           mat-flat-button color="primary">Sign in</button>
       </div>
     </form>
     <div class="mt-3 login-btn-design">
-      <button matTooltip="Admin sign in" (click)="authService.SignIn('pascalsteffen@hotmail.com', 'Admin1234')"
+      <button (click)="authenticationService.showLoginUser('Marcus_Kobi', 'Test2101')" matTooltip="Admin sign in"
         type="submit" class="submit-btn-design me-3" mat-flat-button color="primary">Admin Sign in</button>
-      <button matTooltip="Guest sign in" (click)="authService.SignIn('pasygaming@hotmail.com', 'Test1234')"
-        type="submit" class="submit-btn-design" mat-flat-button color="primary">Guest Sign in</button>
+      <button (click)="authenticationService.showLoginUser('Andrea_Vidal', 'Test2101')" matTooltip="Guest sign in"
+        type="submit" class="submit-btn-design" mat-flat-button color="primary">Guest
+        Sign in</button>
     </div>
   </div>
 </div>

@@ -1,21 +1,42 @@
+<div class="mb-4 text-center">
+  <h1>Userprofil</h1>
+  <span>If you have changed your profile, you will be logged out.</span>
+</div>
 <form #myForm="ngForm" action="" class="form-container">
 
   <div class="d-flex justify-content-center mb-2">
     <mat-form-field class=" full-width" appearance="outline">
       <mat-label>Username</mat-label>
-      <input type="text" name="Username" [(ngModel)]="username" matInput matInput placeholder="Enter your Username"
-        pattern="[a-zA-Z- ]*" required>
+      <input type="text" name="username" [(ngModel)]="this.authenticationService.currentUserData.username" matInput
+        matInput placeholder="Enter your Username" pattern="[a-zA-Z-._ ]*" required>
       <mat-error *ngIf="usernameFormControl.hasError('required')">
-        This field is <strong>required</strong>
+        This field is <strong>required with only these characters [a-zA-Z-._ ]</strong>
       </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="d-flex justify-content-center mb-2">
+    <mat-form-field class=" full-width" appearance="outline">
+      <mat-label>Firstname</mat-label>
+      <input type="text" name="first_name" [(ngModel)]="this.authenticationService.currentUserData.first_name" matInput
+        matInput placeholder="Enter your Firstname" pattern="[a-zA-Z- ]*">
+    </mat-form-field>
+  </div>
+
+  <div class="d-flex justify-content-center mb-2">
+    <mat-form-field class=" full-width" appearance="outline">
+      <mat-label>Lastname</mat-label>
+      <input type="text" name="last_name" [(ngModel)]="this.authenticationService.currentUserData.last_name" matInput
+        matInput placeholder="Enter your Lastname" pattern="[a-zA-Z- ]*">
     </mat-form-field>
   </div>
 
   <div class="d-flex justify-content-center">
     <mat-form-field class=" full-width" appearance="outline">
       <mat-label>E-Mail</mat-label>
-      <input pattern="[a-z0-9._+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" type="email" name="email" [(ngModel)]="email" matInput
-        matInput placeholder="Enter your E-mail" required>
+      <input pattern="[a-z0-9._+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" type="email" name="email"
+        [(ngModel)]="this.authenticationService.currentUserData.email" matInput matInput placeholder="Enter your E-Mail"
+        required>
       <mat-error *ngIf="emailFormControl.hasError('required')">
         This field is <strong>required</strong> and only allowed a valid email address.
       </mat-error>
@@ -27,7 +48,7 @@
       <mat-icon class="me-2">close</mat-icon>Close
     </button>
     <button mat-flat-button color="primary" [mat-dialog-close]="myForm" [disabled]="!myForm.valid"
-      (click)="authService.updateUser(username, email)" type="submit" class="submit-btn-design">
+      (click)="updateUser()" type="submit" class="submit-btn-design">
       <mat-icon class="me-2">sync_alt</mat-icon>Update Profil
     </button>
   </mat-dialog-actions>

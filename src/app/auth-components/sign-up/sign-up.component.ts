@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/shared/services/auth-service/auth.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -10,7 +9,7 @@ import { AuthService } from 'src/app/shared/services/auth-service/auth.service';
 export class SignUpComponent implements OnInit {
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
 
-  constructor(public authService: AuthService) { }
+  constructor() { }
 
   ngOnInit(): void {
   }

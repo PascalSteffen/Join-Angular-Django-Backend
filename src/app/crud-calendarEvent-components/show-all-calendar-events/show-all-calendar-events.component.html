@@ -2,7 +2,7 @@
   <div class="border-bottom headline">
     <h1>All Events</h1>
   </div>
-  <div *ngIf="authService.userData as user" class="mt-2rem ticket-container">
+  <div class="mt-2rem ticket-container">
     <div class="row headline-container border-bottom pb-3">
       <span class="col">Created by</span>
       <span class="col">Title</span>
@@ -11,13 +11,15 @@
     </div>
     <div class="ticket-content-container">
       <div *ngFor="let event of allCalendarEvents$ | async"
-        (click)="user.displayName == event['event'].from && openDeleteEventDialog(event)" [mat-dialog-close]="true">
-        <div (click)="user.displayName !== event['event'].from && showNoYourEventAlert()">
+        (click)="this.authenticationService.currentUserData.username == event['from_user']['username'] && openDeleteEventDialog(event)"
+        [mat-dialog-close]="true">
+        <div
+          (click)="this.authenticationService.currentUserData.username !== event['from_user']['username'] && showNoYourEventAlert()">
           <div class="row py-3 border-bottom ticket-content-container-child">
-            <span class="col">{{event['event'].from}}</span>
-            <span class="col">{{event['event'].title}}</span>
-            <span class="col">{{event['event'].startDate | date:'MMMM d, y'}}</span>
-            <span class="col">{{event['event'].endDate | date:'MMMM d, y'}}</span>
+            <span class="col">{{event['from_user']['first_name']}} {{event['from_user']['last_name']}}</span>
+            <span class="col">{{event['title']}}</span>
+            <span class="col">{{event['start_date'] | date:'MMMM d, y'}}</span>
+            <span class="col">{{event['end_date'] | date:'MMMM d, y'}}</span>
           </div>
         </div>
       </div>
@@ -29,27 +31,30 @@
   <div class="border-bottom headline">
     <h1>All Events</h1>
   </div>
-  <div *ngIf="authService.userData as user" class="ticket-container">
+  <div class="ticket-container">
     <div class="ticket-content-container">
       <div *ngFor="let event of allCalendarEvents$ | async"
-        (click)="user.displayName == event['event'].from && openDeleteEventDialog(event)" [mat-dialog-close]="true">
-        <div (click)="user.displayName !== event['event'].from && showNoYourEventAlert()">
+        (click)="this.authenticationService.currentUserData.username == event['from_user']['username'] && openDeleteEventDialog(event)"
+        [mat-dialog-close]="true">
+        <div
+          (click)="this.authenticationService.currentUserData.username !== event['from_user']['username'] && showNoYourEventAlert()">
           <div class="border-bottom ticket-content-container-child">
             <div class="my-2 d-flex flex-column align-items-center">
               <span class="mobile-headline-design">Created by:</span>
-              <span class="mobile-content-design">{{event['event'].from}}</span>
+              <span class="mobile-content-design">{{event['from_user']['first_name']}}
+                {{event['from_user']['last_name']}}</span>
             </div>
             <div class="my-2 d-flex flex-column align-items-center">
               <span class="mobile-headline-design">Title:</span>
-              <span class="mobile-content-design">{{event['event'].title}}</span>
+              <span class="mobile-content-design">{{event['title']}}</span>
             </div>
             <div class="my-2 d-flex flex-column align-items-center">
               <span class="mobile-headline-design">From:</span>
-              <span class="mobile-content-design">{{event['event'].startDate | date:'MMMM d, y'}}</span>
+              <span class="mobile-content-design">{{event['start_date'] | date:'MMMM d, y'}}</span>
             </div>
             <div class="my-2 d-flex flex-column align-items-center">
               <span class="mobile-headline-design">Until:</span>
-              <span class="mobile-content-design">{{event['event'].endDate | date:'MMMM d, y'}}</span>
+              <span class="mobile-content-design">{{event['end_date'] | date:'MMMM d, y'}}</span>
             </div>
           </div>
         </div>

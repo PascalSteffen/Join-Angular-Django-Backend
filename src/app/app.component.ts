@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from './shared/services/auth-service/auth.service';
+import { AuthenticationService } from './shared/services/authentication-service/authentication.service';
 
 @Component({
   selector: 'app-root',
@@ -9,5 +9,7 @@ import { AuthService } from './shared/services/auth-service/auth.service';
 export class AppComponent {
   title = 'join-angular';
 
-  constructor(public authService: AuthService) { }
+  constructor(public authenticationService: AuthenticationService) {
+    this.authenticationService.autoLogin();
+  }
 }

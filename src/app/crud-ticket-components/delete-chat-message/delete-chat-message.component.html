@@ -5,7 +5,7 @@
   </div>
   <div class="justify-content-between" mat-dialog-actions>
     <button mat-flat-button mat-button mat-dialog-close>Cancel</button>
-    <button mat-flat-button color="warn" mat-button (click)="deleteCurrentMessage()" [mat-dialog-close]="true"
+    <button mat-flat-button color="warn" mat-button (click)="deleteChatMessage()" [mat-dialog-close]="true"
       cdkFocusInitial>
       <mat-icon class="me-2">delete</mat-icon>Delete
       Message
@@ -23,7 +23,7 @@
     <button mat-flat-button mat-button mat-dialog-close>
       <mat-icon>close</mat-icon>
     </button>
-    <button mat-flat-button color="warn" mat-button (click)="deleteCurrentMessage()" [mat-dialog-close]="true"
+    <button mat-flat-button color="warn" mat-button (click)="deleteChatMessage()" [mat-dialog-close]="true"
       cdkFocusInitial>
       <mat-icon>delete</mat-icon>
     </button>

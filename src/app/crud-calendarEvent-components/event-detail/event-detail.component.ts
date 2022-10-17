@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarEvent } from 'angular-calendar';
+import { AuthenticationService } from 'src/app/shared/services/authentication-service/authentication.service';
 import { CalendarEventService } from 'src/app/shared/services/calendarEvent-service/calendar-event.service';
 
 @Component({
@@ -13,9 +14,10 @@ export class EventDetailComponent implements OnInit {
 
   calendarEvent: CalendarEvent[];
 
-  constructor(public calendarEventService: CalendarEventService, public dialog: MatDialog) { }
+  constructor(public calendarEventService: CalendarEventService, public dialog: MatDialog, public authenticationService: AuthenticationService) { }
 
   ngOnInit(): void {
+    this.authenticationService.isAuthenticated();
   }
 
 }

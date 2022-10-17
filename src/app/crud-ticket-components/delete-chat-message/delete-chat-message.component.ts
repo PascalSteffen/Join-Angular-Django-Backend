@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FirebaseService } from 'src/app/shared/services/firebase-service/firebase.service';
+import { AuthenticationService } from 'src/app/shared/services/authentication-service/authentication.service';
+import { MessageService } from 'src/app/shared/services/message-service/message.service';
 import { TicketService } from 'src/app/shared/services/ticket-service/ticket.service';
+import { UtilityServiceService } from 'src/app/shared/services/utility-service/utility-service.service';
 
 @Component({
   selector: 'app-delete-chat-message',
@@ -10,38 +12,21 @@ import { TicketService } from 'src/app/shared/services/ticket-service/ticket.ser
 
 export class DeleteChatMessageComponent implements OnInit {
 
-  allChatMessages: Object[] = [];
-  ticketId: string;
   message: Object;
-  ticket: any = this.ticketService.ticketDefault();
-  currentDate: number;
 
-  constructor(public ticketService: TicketService, public firebaseService: FirebaseService) { }
+  constructor(public ticketService: TicketService,
+    public messageService: MessageService,
+    public utilityService: UtilityServiceService,
+    public authenticationService: AuthenticationService) { }
 
   ngOnInit(): void {
-    this.messageIteration();
+    this.authenticationService.isAuthenticated();
   }
 
-
-  /**
-   * get all messages from current ticket.
-   */
-  messageIteration() {
-    for (let i = 0; i < this.ticket['messages'].length; i++) {
-      const allMessages = this.ticket['messages'][i];
-      this.allChatMessages.push(allMessages)
-    }
-  }
-
-
-  /**
-   * update and push ne messages.
-   * @param user
-   * @param message
-   */
-  deleteCurrentMessage() {
-    this.allChatMessages.splice(this.allChatMessages.indexOf(this.message), 1);
-    this.firebaseService.updateTicket(this.ticketId, this.currentDate, this.ticket, this.allChatMessages);
+  deleteChatMessage() {
+    this.messageService.deleteMessage(this.message['id']).subscribe(() => {
+      this.utilityService.alert('Message deleted successfully.', 5000);
+    });
   }
 
 }

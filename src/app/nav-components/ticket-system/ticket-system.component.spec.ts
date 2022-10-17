@@ -1,11 +1,7 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { environment } from 'src/environments/environment';
 
 import { TicketSystemComponent } from './ticket-system.component';
 
@@ -16,9 +12,7 @@ describe('TicketSystemComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [TicketSystemComponent],
-      imports: [MatDialogModule, provideFirebaseApp(() => initializeApp(environment.firebase)),
-        provideFirestore(() => getFirestore()), AngularFireAuthModule,
-        AngularFireModule.initializeApp(environment.firebase), MatSnackBarModule]
+      imports: [MatDialogModule, HttpClientModule, MatSnackBarModule]
     })
       .compileComponents();
 

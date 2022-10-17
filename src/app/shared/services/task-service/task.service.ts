@@ -1,12 +1,14 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
-import { FirebaseService } from '../firebase-service/firebase.service';
-
+import { Observable, BehaviorSubject } from 'rxjs';
+import { AuthenticationService } from '../authentication-service/authentication.service';
+import { Task } from '../../interfaces/task';
 @Injectable({
   providedIn: 'root'
 })
 
 export class TaskService {
+  private allTasks$ = new BehaviorSubject<Task[]>([])
 
   allTodos: Object[];
   allTodosOnBoard: number = 0;
@@ -18,20 +20,104 @@ export class TaskService {
   taskHistory: number = 0;
   nextImportantDate = [];
 
-  constructor(public firebaseService: FirebaseService, public firestore: Firestore) { }
+
+  constructor(private HttpRequest: HttpClient, private authenticationService: AuthenticationService) { }
+
+  public initAllTasks(): void {
+    this.HttpRequest.get<Task[]>('https://join-backend-21012101.herokuapp.com/api/tasks/',
+      { headers: this.authenticationService.setTokenToHeader() }).subscribe(allTasks => {
+        this.allTasks$.next(allTasks)
+      })
+  }
+
+
+  public getAllTasks(): Observable<Task[]> {
+    return this.allTasks$;
+  }
+
+
+  createTask(task: Task, date: Date) {
+    let upcoming_deadline = date.getTime() / 1000;
+    const body = {
+      title: task.title,
+      description: task.description,
+      username: task.assigned_to,
+      category: task.category,
+      priority: task.priority,
+      upcoming_deadline: upcoming_deadline,
+      todo: task.todo,
+      in_progress: task.in_progress,
+      awaiting_feedback: task.awaiting_feedback,
+      done: task.done,
+      history: task.history
+    };
+    return this.HttpRequest.post<Task[]>(`https://join-backend-21012101.herokuapp.com/api/tasks/`,
+      body, { headers: this.authenticationService.setTokenToHeader() })
+  }
+
+
+  updateTask(task: Task, date: Date) {
+    let upcoming_deadline = date.getTime() / 1000;
+    const body = {
+      title: task.title,
+      description: task.description,
+      username: task.assigned_to['username'],
+      category: task.category,
+      priority: task.priority,
+      upcoming_deadline: upcoming_deadline,
+      todo: task.todo,
+      in_progress: task.in_progress,
+      awaiting_feedback: task.awaiting_feedback,
+      done: task.done,
+      history: task.history
+    };
+    return this.HttpRequest.put<Task[]>(`https://join-backend-21012101.herokuapp.com/api/tasks/${task.id}/`,
+      body, { headers: this.authenticationService.setTokenToHeader() })
+  }
+
+
+  pushTask(task: Task, todo: boolean, in_progress: boolean, awaiting_feedback: boolean, done: boolean, history: boolean) {
+    let upcoming_deadline = new Date(task.upcoming_deadline).getTime() / 1000;
+    const body = {
+      title: task.title,
+      description: task.description,
+      username: task.assigned_to.username,
+      category: task.category,
+      priority: task.priority,
+      upcoming_deadline: upcoming_deadline,
+      todo: todo,
+      in_progress: in_progress,
+      awaiting_feedback: awaiting_feedback,
+      done: done,
+      history: history
+    };
+    return this.HttpRequest.put<Task[]>(`https://join-backend-21012101.herokuapp.com/api/tasks/${task.id}/`,
+      body, { headers: this.authenticationService.setTokenToHeader() })
+  }
+
+
+  deleteTask(id: number) {
+    return this.HttpRequest.delete<Task[]>(`https://join-backend-21012101.herokuapp.com/api/tasks/${id}/`,
+      { headers: this.authenticationService.setTokenToHeader() })
+  }
 
 
   taskDefault() {
     return {
+      id: 0,
       title: '',
       description: '',
-      categorie: '',
-      assignTo: '',
-      date: 0,
+      assigned_to: {
+        'username': '',
+        'first_name': '',
+        'last_name': ''
+      },
+      category: '',
+      upcoming_deadline: 0,
       priority: '',
       todo: true,
-      inProgress: false,
-      awaitingFeedback: false,
+      in_progress: false,
+      awaiting_feedback: false,
       done: false,
       history: false,
     };
@@ -61,14 +147,14 @@ export class TaskService {
    */
   getSummaryInfos(newTask: Object[]) {
     for (let i = 0; i < newTask.length; i++) {
-      const priority = newTask[i]['task']['priority'];
-      const todo = newTask[i]['task']['todo']
-      const done = newTask[i]['task']['done']
-      const inProgress = newTask[i]['task']['inProgress'];
-      const awaitingFeedback = newTask[i]['task']['awaitingFeedback'];
-      const nextImportantDate = newTask[i]['task']['date'];
-      const NoHistory = newTask[i]['task']['history'];
-      this.addTaskValues(priority, inProgress, awaitingFeedback, todo, done, nextImportantDate, NoHistory);
+      const priority = newTask[i]['priority'];
+      const todo = newTask[i]['todo']
+      const done = newTask[i]['done']
+      const in_progress = newTask[i]['in_progress'];
+      const awaiting_feedback = newTask[i]['awaiting_feedback'];
+      const nextImportantDate = newTask[i]['upcoming_deadline'];
+      const NoHistory = newTask[i]['history'];
+      this.addTaskValues(priority, in_progress, awaiting_feedback, todo, done, nextImportantDate, NoHistory);
     }
   }
 
@@ -82,16 +168,16 @@ export class TaskService {
    * @param done
    * @param nextImportantDate
    */
-  addTaskValues(priority: string, inProgress: boolean, awaitingFeedback: boolean, todo: boolean, done: boolean, nextImportantDate: number, NoHistory: boolean) {
+  addTaskValues(priority: string, in_progress: boolean, awaiting_feedback: boolean, todo: boolean, done: boolean, nextImportantDate: number, NoHistory: boolean) {
     if (priority === 'Urgent' && NoHistory == false) {
       this.nextImportantDate.push(nextImportantDate);
       this.priorityUrgent++
     }
-    if (inProgress === true && NoHistory == false) {
+    if (in_progress === true && NoHistory == false) {
       this.allTaskInProgress++
       this.allTodosOnBoard++
     }
-    if (awaitingFeedback === true && NoHistory == false) {
+    if (awaiting_feedback === true && NoHistory == false) {
       this.allTaskAwaitingFeedback++
       this.allTodosOnBoard++
     }
@@ -114,23 +200,23 @@ export class TaskService {
    * @param task
    * @returns
    */
-  findTodoTask(task: []) {
-    return task['task'].todo == true;
+  findTodoTask(task: any) {
+    return task.todo == true;
   }
 
-  findInProgressTask(task: []) {
-    return task['task'].inProgress == true;
+  findInProgressTask(task: any) {
+    return task.in_progress == true;
   }
 
-  findAwatingFeedbackTask(task: []) {
-    return task['task'].awaitingFeedback == true;
+  findAwatingFeedbackTask(task: any) {
+    return task.awaiting_feedback == true;
   }
 
-  findDoneTask(task: []) {
-    return task['task'].done == true;
+  findDoneTask(task: any) {
+    return task.done == true;
   }
-  findHistoryTask(task: []) {
-    return task['task'].history == true;
+  findHistoryTask(task: any) {
+    return task.history == true;
   }
 
 }

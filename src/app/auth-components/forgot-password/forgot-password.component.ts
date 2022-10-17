@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/shared/services/auth-service/auth.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -12,7 +11,7 @@ export class ForgotPasswordComponent implements OnInit {
   passwordFormControl = new FormControl('', [Validators.required]);
   hide = true;
 
-  constructor(public authService: AuthService) { }
+  constructor() { }
 
   ngOnInit(): void {
   }

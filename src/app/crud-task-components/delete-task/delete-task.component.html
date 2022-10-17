@@ -5,14 +5,13 @@
   </div>
   <div class="justify-content-between" mat-dialog-actions>
     <button mat-flat-button mat-button mat-dialog-close>Cancel</button>
-    <button mat-flat-button color="warn" mat-button (click)="firebaseService.deleteTask(this.taskId)"
-      [mat-dialog-close]="true" cdkFocusInitial>
+    <button mat-flat-button color="warn" mat-button (click)="deleteTask(task.id)" [mat-dialog-close]="true"
+      cdkFocusInitial>
       <mat-icon class="me-2">delete</mat-icon>Delete
       Task
     </button>
   </div>
 </div>
-
 
 <div class="mobile-mode">
   <h1 mat-dialog-title>Delete Task</h1>
@@ -23,8 +22,8 @@
     <button mat-flat-button mat-button mat-dialog-close>
       <mat-icon>close</mat-icon>
     </button>
-    <button mat-flat-button color="warn" mat-button (click)="firebaseService.deleteTask(this.taskId)"
-      [mat-dialog-close]="true" cdkFocusInitial>
+    <button mat-flat-button color="warn" mat-button (click)="deleteTask(task.id)" [mat-dialog-close]="true"
+      cdkFocusInitial>
       <mat-icon>delete</mat-icon>
     </button>
   </div>

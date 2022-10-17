@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Ticket } from 'src/app/shared/interfaces/ticket';
-import { AuthService } from 'src/app/shared/services/auth-service/auth.service';
-import { FirebaseService } from 'src/app/shared/services/firebase-service/firebase.service';
+import { AuthenticationService } from 'src/app/shared/services/authentication-service/authentication.service';
 import { TicketService } from 'src/app/shared/services/ticket-service/ticket.service';
+import { UtilityServiceService } from 'src/app/shared/services/utility-service/utility-service.service';
 
 @Component({
   selector: 'app-create-ticket',
@@ -16,25 +16,19 @@ export class CreateTicketComponent implements OnInit {
   titleFormControl = new FormControl('', [Validators.required]);
   descriptionFormControl = new FormControl('', [Validators.required]);
 
-  currentTicketNumber: number;
   ticket: Ticket = this.ticketService.ticketDefault();
-  allChatMessages: any = [];
-  ticketId: string;
-  newMessage: string;
-  currentDate = new Date().getTime();
 
-  constructor(public ticketService: TicketService, public firebaseService: FirebaseService, public authService: AuthService) { }
+  constructor(public ticketService: TicketService, public utilityService: UtilityServiceService,
+    public authenticationService: AuthenticationService) { }
 
   ngOnInit(): void {
+    this.authenticationService.isAuthenticated();
   }
 
-  newTicket(user: string, message: string) {
-    let newMessage = {
-      date: this.currentDate,
-      from: user,
-      message: message
-    }
-    this.allChatMessages.push(newMessage);
-    this.firebaseService.saveTicket(this.currentTicketNumber, this.currentDate, user, this.ticket, newMessage);
+
+  createTicket() {
+    this.ticketService.createTicket(this.ticket).subscribe(() => {
+      this.utilityService.alert('Ticket created successfully.', 5000);
+    });
   }
 }

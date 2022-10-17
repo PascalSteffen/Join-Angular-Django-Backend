@@ -1,5 +1,5 @@
 <div class="form-container">
-  <form #myForm="ngForm" *ngIf="authService.userData as user" action="" class="form-container flex column">
+  <form #myForm="ngForm" action="" class="form-container flex column">
     <h1 class="d-flex justify-content-center" mat-dialog-title>Create a ticket</h1>
     <div class="d-flex flex-column">
       <mat-form-field class="mb-1" appearance="outline">
@@ -13,8 +13,8 @@
 
       <mat-form-field class="mb-1" appearance="outline">
         <mat-label>Description</mat-label>
-        <textarea type="text" name="description" [(ngModel)]="newMessage" matInput placeholder="Enter a Description"
-          required pattern="[a-zA-Z0-9-.,+?! \-_.\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u00FF
+        <textarea type="text" name="description" [(ngModel)]="ticket.ticket_message" matInput
+          placeholder="Enter a Description" required pattern="[a-zA-Z0-9-.,+?! \-_.\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u00FF
         ]*"></textarea>
         <mat-error *ngIf="descriptionFormControl.hasError('required')">
           This field is <strong>required</strong>
@@ -25,8 +25,8 @@
     <div class="border mb-3"></div>
 
     <div class="d-flex justify-content-end">
-      <button [disabled]="myForm.invalid" [mat-dialog-close]="true" (click)="newTicket(user.displayName, newMessage)"
-        type="submit" class="submit-btn-design" mat-flat-button color="primary">Create Ticket</button>
+      <button [disabled]="myForm.invalid" [mat-dialog-close]="true" (click)="createTicket()" type="submit"
+        class="submit-btn-design" mat-flat-button color="primary">Create Ticket</button>
     </div>
   </form>
 </div>

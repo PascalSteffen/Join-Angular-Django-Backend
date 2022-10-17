@@ -20,10 +20,10 @@
   <div class="d-flex team-container flex-column px-2">
     <div class="row d-flex team-container-child align-items-center px-5 border-bottom"
       (click)="openSetUnsetAdminDialog(user)"
-      *ngFor="let user of allUsers$ | async | searchfilter:name | sortBy: 'displayName'">
+      *ngFor="let user of allUsers$ | async | searchfilter:name | sortBy: 'first_name'">
       <mat-icon>person</mat-icon>
       <div class="col d-flex flex-column">
-        <h1 [class.isAdmin]=" user['admin']">{{user['displayName']}}</h1>
+        <h1 [class.isAdmin]=" user['is_staff']">{{user['first_name']}} {{user['last_name']}}</h1>
         <span class="email-width">{{user['email']}}</span>
       </div>
     </div>
