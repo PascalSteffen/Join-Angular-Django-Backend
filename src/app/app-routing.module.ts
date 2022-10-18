@@ -7,7 +7,6 @@ import { PrivacyComponent } from './nav-components/privacy/privacy.component';
 import { SummaryComponent } from './nav-components/summary/summary.component';
 import { TaskHistoryComponent } from './nav-components/task-history/task-history.component';
 import { SignInComponent } from './auth-components/sign-in/sign-in.component';
-import { ForgotPasswordComponent } from './auth-components/forgot-password/forgot-password.component';
 import { AuthGuard } from './shared/guard/auth.guard';
 import { AuthReverseGuard } from './shared/guard/auth-reverse.guard';
 import { TeamComponent } from './nav-components/team/team.component';
