@@ -39,7 +39,7 @@ mat-drawer-container {
   li {
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: flex-start;
     padding-left: 65px;
     font-size: 20px;
     cursor: pointer;
@@ -91,7 +91,7 @@ mat-drawer-container {
 }
 
 ::ng-deep .mat-badge-content {
-  background: $colorLight  !important;
+  background: $colorLight !important;
   color: white !important
 }
 

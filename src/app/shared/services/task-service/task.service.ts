@@ -24,7 +24,7 @@ export class TaskService {
   constructor(private HttpRequest: HttpClient, private authenticationService: AuthenticationService) { }
 
   public initAllTasks(): void {
-    this.HttpRequest.get<Task[]>('https://join-backend-21012101.herokuapp.com/api/tasks/',
+    this.HttpRequest.get<Task[]>('https://join-backend-2101.herokuapp.com/api/tasks/',
       { headers: this.authenticationService.setTokenToHeader() }).subscribe(allTasks => {
         this.allTasks$.next(allTasks)
       })
@@ -51,7 +51,7 @@ export class TaskService {
       done: task.done,
       history: task.history
     };
-    return this.HttpRequest.post<Task[]>(`https://join-backend-21012101.herokuapp.com/api/tasks/`,
+    return this.HttpRequest.post<Task[]>(`https://join-backend-2101.herokuapp.com/api/tasks/`,
       body, { headers: this.authenticationService.setTokenToHeader() })
   }
 
@@ -71,7 +71,7 @@ export class TaskService {
       done: task.done,
       history: task.history
     };
-    return this.HttpRequest.put<Task[]>(`https://join-backend-21012101.herokuapp.com/api/tasks/${task.id}/`,
+    return this.HttpRequest.put<Task[]>(`https://join-backend-2101.herokuapp.com/api/tasks/${task.id}/`,
       body, { headers: this.authenticationService.setTokenToHeader() })
   }
 
@@ -91,13 +91,13 @@ export class TaskService {
       done: done,
       history: history
     };
-    return this.HttpRequest.put<Task[]>(`https://join-backend-21012101.herokuapp.com/api/tasks/${task.id}/`,
+    return this.HttpRequest.put<Task[]>(`https://join-backend-2101.herokuapp.com/api/tasks/${task.id}/`,
       body, { headers: this.authenticationService.setTokenToHeader() })
   }
 
 
   deleteTask(id: number) {
-    return this.HttpRequest.delete<Task[]>(`https://join-backend-21012101.herokuapp.com/api/tasks/${id}/`,
+    return this.HttpRequest.delete<Task[]>(`https://join-backend-2101.herokuapp.com/api/tasks/${id}/`,
       { headers: this.authenticationService.setTokenToHeader() })
   }
 

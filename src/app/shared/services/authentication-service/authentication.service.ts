@@ -19,7 +19,7 @@ export class AuthenticationService {
    * @param userData
    */
   registerNewUser(userData: Object) {
-    this.HttpRequest.post<Object>('https://join-backend-21012101.herokuapp.com/api/auth/register', userData).subscribe(() => {
+    this.HttpRequest.post<Object>('https://join-backend-2101.herokuapp.com/api/auth/register', userData).subscribe(() => {
       this.utilityService.alert('User created successfully.', 5000);
     })
   }
@@ -31,7 +31,7 @@ export class AuthenticationService {
    * @param userData
    */
   loginUser(userData: Object) {
-    this.HttpRequest.post<Object>('https://join-backend-21012101.herokuapp.com/api/auth/login', userData).subscribe(response => {
+    this.HttpRequest.post<Object>('https://join-backend-2101.herokuapp.com/api/auth/login', userData).subscribe(response => {
       this.token = response['token'];
       this.checkToken(response['token']).subscribe(response => {
         this.setUserToLocalStorage(response)
@@ -57,7 +57,7 @@ export class AuthenticationService {
       username: username,
       password: password
     }
-    this.HttpRequest.post<Object>('https://join-backend-21012101.herokuapp.com/api/auth/login', userdata).subscribe(response => {
+    this.HttpRequest.post<Object>('https://join-backend-2101.herokuapp.com/api/auth/login', userdata).subscribe(response => {
       this.token = response['token'];
       this.checkToken(response['token']).subscribe(response => {
         this.setUserToLocalStorage(response)
@@ -131,7 +131,7 @@ export class AuthenticationService {
       'Authorization': `token ${token}`
     });
     const requestOptions = { headers: headers };
-    return this.HttpRequest.get<User>('https://join-backend-21012101.herokuapp.com/api/auth/user', requestOptions)
+    return this.HttpRequest.get<User>('https://join-backend-2101.herokuapp.com/api/auth/user', requestOptions)
   }
 
 
@@ -149,7 +149,7 @@ export class AuthenticationService {
    * logout the user on API-Endpoint logout.
    */
   logoutUser() {
-    this.HttpRequest.post('https://join-backend-21012101.herokuapp.com/api/auth/logout', null, { headers: this.setTokenToHeader() }).subscribe(() => {
+    this.HttpRequest.post('https://join-backend-2101.herokuapp.com/api/auth/logout', null, { headers: this.setTokenToHeader() }).subscribe(() => {
       localStorage.removeItem('currentUser');
       this.utilityService.alert('Logged out successfully.', 5000);
       this.router.navigate(['sign-in']);

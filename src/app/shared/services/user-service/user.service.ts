@@ -15,7 +15,7 @@ export class UserService {
   constructor(private HttpRequest: HttpClient, public authenticationService: AuthenticationService) { }
 
   public initAllUsers(): void {
-    this.HttpRequest.get<User[]>('https://join-backend-21012101.herokuapp.com/api/users/',
+    this.HttpRequest.get<User[]>('https://join-backend-2101.herokuapp.com/api/users/',
       { headers: this.authenticationService.setTokenToHeader() }).subscribe(allUsers => {
         this.allUsers$.next(allUsers)
       })
@@ -37,13 +37,13 @@ export class UserService {
       is_superuser: user['is_superuser'],
       token: user['token'],
     };
-    return this.HttpRequest.put<User[]>(`https://join-backend-21012101.herokuapp.com/api/users/${user['id']}/`,
+    return this.HttpRequest.put<User[]>(`https://join-backend-2101.herokuapp.com/api/users/${user['id']}/`,
       body, { headers: this.authenticationService.setTokenToHeader() })
   }
 
 
   deleteUser(id: number) {
-    return this.HttpRequest.delete<User[]>(`https://join-backend-21012101.herokuapp.com/api/users/${id}/`,
+    return this.HttpRequest.delete<User[]>(`https://join-backend-2101.herokuapp.com/api/users/${id}/`,
       { headers: this.authenticationService.setTokenToHeader() })
   }
 
@@ -59,7 +59,7 @@ export class UserService {
       is_superuser: user['is_superuser'],
       token: user['token'],
     };
-    return this.HttpRequest.put<User[]>(`https://join-backend-21012101.herokuapp.com/api/users/${user['id']}/`,
+    return this.HttpRequest.put<User[]>(`https://join-backend-2101.herokuapp.com/api/users/${user['id']}/`,
       body, { headers: this.authenticationService.setTokenToHeader() })
   }
 }

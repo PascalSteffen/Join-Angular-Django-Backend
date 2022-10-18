@@ -17,7 +17,7 @@ export class CalendarEventService {
 
 
   public initAllCalendarEvents(): void {
-    this.HttpRequest.get<Event[]>('https://join-backend-21012101.herokuapp.com/api/calendar_events/',
+    this.HttpRequest.get<Event[]>('https://join-backend-2101.herokuapp.com/api/calendar_events/',
       { headers: this.authenticationService.setTokenToHeader() }).subscribe(allTasks => {
         this.allCalendarEvents$.next(allTasks)
       })
@@ -53,13 +53,13 @@ export class CalendarEventService {
       start_date: new_start_date,
       end_date: new_end_date,
     };
-    return this.HttpRequest.post<Event[]>('https://join-backend-21012101.herokuapp.com/api/calendar_events/',
+    return this.HttpRequest.post<Event[]>('https://join-backend-2101.herokuapp.com/api/calendar_events/',
       body, { headers: this.authenticationService.setTokenToHeader() })
   }
 
 
   deleteEvent(id: any) {
-    return this.HttpRequest.delete<Event[]>(`https://join-backend-21012101.herokuapp.com/api/calendar_events/${id}/`,
+    return this.HttpRequest.delete<Event[]>(`https://join-backend-2101.herokuapp.com/api/calendar_events/${id}/`,
       { headers: this.authenticationService.setTokenToHeader() })
   }
 

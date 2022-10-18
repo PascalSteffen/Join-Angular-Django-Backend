@@ -16,7 +16,7 @@ export class TicketService {
   constructor(private HttpRequest: HttpClient, private authenticationService: AuthenticationService) { }
 
   public initAllTickets(): void {
-    this.HttpRequest.get<Ticket[]>('https://join-backend-21012101.herokuapp.com/api/tickets/',
+    this.HttpRequest.get<Ticket[]>('https://join-backend-2101.herokuapp.com/api/tickets/',
       { headers: this.authenticationService.setTokenToHeader() }).subscribe(allTickets => {
         this.allTickets$.next(allTickets)
       })
@@ -34,7 +34,7 @@ export class TicketService {
       username: this.authenticationService.currentUserData['username'],
       ticket_message: ticket.ticket_message,
     };
-    return this.HttpRequest.post<Ticket[]>(`https://join-backend-21012101.herokuapp.com/api/tickets/`,
+    return this.HttpRequest.post<Ticket[]>(`https://join-backend-2101.herokuapp.com/api/tickets/`,
       body, { headers: this.authenticationService.setTokenToHeader() })
   }
 
@@ -43,19 +43,19 @@ export class TicketService {
     const body = {
       username: this.authenticationService.currentUserData['username']
     };
-    return this.HttpRequest.put<Ticket[]>(`https://join-backend-21012101.herokuapp.com/api/tickets/${ticket_id}/`,
+    return this.HttpRequest.put<Ticket[]>(`https://join-backend-2101.herokuapp.com/api/tickets/${ticket_id}/`,
       body, { headers: this.authenticationService.setTokenToHeader() })
   }
 
 
   getCurrentTicket(id: string) {
-    return this.HttpRequest.get<Ticket[]>(`https://join-backend-21012101.herokuapp.com/api/tickets/${id}/`,
+    return this.HttpRequest.get<Ticket[]>(`https://join-backend-2101.herokuapp.com/api/tickets/${id}/`,
       { headers: this.authenticationService.setTokenToHeader() })
   }
 
 
   deleteTicket(id: string) {
-    return this.HttpRequest.delete<Ticket[]>(`https://join-backend-21012101.herokuapp.com/api/tickets/${id}/`,
+    return this.HttpRequest.delete<Ticket[]>(`https://join-backend-2101.herokuapp.com/api/tickets/${id}/`,
       { headers: this.authenticationService.setTokenToHeader() })
   }
 

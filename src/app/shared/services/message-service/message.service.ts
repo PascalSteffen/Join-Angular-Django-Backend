@@ -16,7 +16,7 @@ export class MessageService {
   constructor(private HttpRequest: HttpClient, private authenticationService: AuthenticationService) { }
 
   public initAllTicketMessages(id: string): void {
-    this.HttpRequest.get<Message[]>(`https://join-backend-21012101.herokuapp.com/api/messages/?ticket_id=${id}`,
+    this.HttpRequest.get<Message[]>(`https://join-backend-2101.herokuapp.com/api/messages/?ticket_id=${id}`,
       { headers: this.authenticationService.setTokenToHeader() }).subscribe(allTicketMessages => {
         this.allTicketMessages$.next(allTicketMessages)
       })
@@ -34,13 +34,13 @@ export class MessageService {
       date: this.currentDate,
       chat_message: message
     };
-    return this.HttpRequest.post<Message[]>(`https://join-backend-21012101.herokuapp.com/api/messages/`,
+    return this.HttpRequest.post<Message[]>(`https://join-backend-2101.herokuapp.com/api/messages/`,
       body, { headers: this.authenticationService.setTokenToHeader() })
   }
 
 
   deleteMessage(id: string) {
-    return this.HttpRequest.delete<Message[]>(`https://join-backend-21012101.herokuapp.com/api/messages/${id}/`,
+    return this.HttpRequest.delete<Message[]>(`https://join-backend-2101.herokuapp.com/api/messages/${id}/`,
       { headers: this.authenticationService.setTokenToHeader() })
   }
 
