@@ -68,5 +68,4 @@ export class TicketSystemComponent implements OnInit {
       this.utilityService.alert('You do not have enough rights for this ticket.', 5000);
     }
   }
-
 }
