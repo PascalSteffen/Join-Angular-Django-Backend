@@ -3,26 +3,24 @@ import { FormControl, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/shared/services/authentication-service/authentication.service';
 
 @Component({
-  selector: 'app-sign-in',
-  templateUrl: './sign-in.component.html',
-  styleUrls: ['./sign-in.component.scss']
+  selector: 'app-verify-account',
+  templateUrl: './verify-account.component.html',
+  styleUrls: ['./verify-account.component.scss']
 })
-export class SignInComponent implements OnInit {
-
-  usernameFormControl = new FormControl('', [Validators.required]);
+export class VerifyAccountComponent implements OnInit {
+  tokenFormControl = new FormControl('', [Validators.required]);
   passwordFormControl = new FormControl('', [Validators.required]);
-  hide = true;
 
   userdata = {
-    username: '',
-    password: ''
+    password: '',
+    token: '',
   }
 
+  hide: boolean = true;
 
   constructor(public authenticationService: AuthenticationService) { }
 
   ngOnInit(): void {
-
   }
 
 }

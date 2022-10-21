@@ -7,33 +7,71 @@ import { UtilityServiceService } from '../utility-service/utility-service.servic
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationService {
 
+export class AuthenticationService {
+  isloading: boolean = false;
   token: string;
   currentUserData: User = this.userDefault();
 
   constructor(private HttpRequest: HttpClient, public router: Router, public utilityService: UtilityServiceService) { }
+
 
   /**
    * register a new User on API-Endpoint register
    * @param userData
    */
   registerNewUser(userData: Object) {
-    this.HttpRequest.post<Object>('https://join-backend-2101.herokuapp.com/api/auth/register', userData).subscribe(() => {
-      this.utilityService.alert('User created successfully.', 5000);
+    return this.HttpRequest.post<Object>('https://join-backend-2101.herokuapp.com/api/auth/register', userData);
+  }
+
+
+  sendVerification(userData: Object) {
+    return this.HttpRequest.post<Object>('https://join-backend-2101.herokuapp.com/api/password_reset/', userData);
+  }
+
+
+  /**
+   * register a new User on API-Endpoint register
+   * @param userData
+   */
+  forgotPassword(userData: Object) {
+    this.HttpRequest.post<Object>('https://join-backend-2101.herokuapp.com/api/password_reset/', userData).subscribe(() => {
+      this.utilityService.alert('Password reset successfully.', 5000);
+      this.router.navigate(['confirm-password']);
+    }, error => {
+      if (error.status == 400) {
+        this.utilityService.alert('This email address does not exist. Please contact an administrator.', 5000);
+      }
     })
   }
 
 
   /**
-   * login a user on API-Endpoint login. After login, token check on next API-Endpoint user.
-   * After token check add user on localstorage and forward to component summary.
+   * register a new User on API-Endpoint register
+   * @param userData
+   */
+  confirmPassword(userData: Object) {
+    this.HttpRequest.post<Object>('https://join-backend-2101.herokuapp.com/api/password_reset/confirm/', userData).subscribe(() => {
+      this.utilityService.alert('Account was successfully verified with your entered password.', 5000);
+      this.router.navigate(['sign-in']);
+    }, error => {
+      if (error.status == 400) {
+        this.utilityService.alert('This token entry is incorrect. Please contact an administrator.', 5000);
+      }
+    })
+  }
+
+
+  /**
+   *
    * @param userData
    */
   loginUser(userData: Object) {
+    this.isloading = true;
     this.HttpRequest.post<Object>('https://join-backend-2101.herokuapp.com/api/auth/login', userData).subscribe(response => {
       this.token = response['token'];
       this.checkToken(response['token']).subscribe(response => {
+        this.isloading = false;
         this.setUserToLocalStorage(response)
         this.utilityService.alert('Successfully logged in.', 5000);
         this.router.navigate(['summary']);
@@ -53,6 +91,7 @@ export class AuthenticationService {
    * @param password
    */
   showLoginUser(username: string, password: string) {
+    this.isloading = true;
     let userdata = {
       username: username,
       password: password
@@ -60,6 +99,7 @@ export class AuthenticationService {
     this.HttpRequest.post<Object>('https://join-backend-2101.herokuapp.com/api/auth/login', userdata).subscribe(response => {
       this.token = response['token'];
       this.checkToken(response['token']).subscribe(response => {
+        this.isloading = false;
         this.setUserToLocalStorage(response)
         this.utilityService.alert('Successfully logged in.', 5000);
         this.router.navigate(['summary']);

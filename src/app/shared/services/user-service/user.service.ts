@@ -48,6 +48,16 @@ export class UserService {
   }
 
 
+  /**
+   * register a new User on API-Endpoint register
+   * @param userData
+   */
+  changePassword(userData: Object) {
+    return this.HttpRequest.put<Object>('https://join-backend-2101.herokuapp.com/api/change-password/', userData,
+      { headers: this.authenticationService.setTokenToHeader() })
+  }
+
+
   setAdmin(user: User, is_staff: boolean) {
     const body = {
       id: user['id'],

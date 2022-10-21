@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
@@ -31,7 +29,6 @@ import { PushTaskComponent } from './crud-task-components/push-task/push-task.co
 import { TaskHistoryComponent } from './nav-components/task-history/task-history.component';
 import { SearchfilterPipe } from './shared/pipes/filter-pipes/searchfilter.pipe';
 import { SignInComponent } from './auth-components/sign-in/sign-in.component';
-import { SignUpComponent } from './auth-components/sign-up/sign-up.component';
 import { ForgotPasswordComponent } from './auth-components/forgot-password/forgot-password.component';
 import { MainContentComponent } from './main-content/main-content.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -57,6 +54,10 @@ import { EventDetailComponent } from './crud-calendarEvent-components/event-deta
 import { ShowAllCalendarEventsComponent } from './crud-calendarEvent-components/show-all-calendar-events/show-all-calendar-events.component';
 import { DeleteCalendarEventComponent } from './crud-calendarEvent-components/delete-calendar-event/delete-calendar-event.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ConfirmPasswordComponent } from './auth-components/confirm-password/confirm-password.component';
+import { VerifyAccountComponent } from './auth-components/verify-account/verify-account.component';
+import { PasswordChangeComponent } from './user-components/password-change/password-change.component';
+import { RegisterUserComponent } from './auth-components/register-user/register-user.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,6 @@ import { HttpClientModule } from '@angular/common/http';
     TaskHistoryComponent,
     SearchfilterPipe,
     SignInComponent,
-    SignUpComponent,
     ForgotPasswordComponent,
     MainContentComponent,
     EditUserComponent,
@@ -91,6 +91,10 @@ import { HttpClientModule } from '@angular/common/http';
     EventDetailComponent,
     ShowAllCalendarEventsComponent,
     DeleteCalendarEventComponent,
+    ConfirmPasswordComponent,
+    VerifyAccountComponent,
+    PasswordChangeComponent,
+    RegisterUserComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,61 @@
+<div class="mb-4 text-center">
+  <h1>Register a new User</h1>
+  <span>After registration, <br> the user must verify himself via the token in his email.</span>
+</div>
+<form #myForm="ngForm" action="" class="form-container">
+
+  <div class="d-flex justify-content-center mb-2">
+    <mat-form-field class=" full-width" appearance="outline">
+      <mat-label>Username</mat-label>
+      <input type="text" name="username" [(ngModel)]="userData.username" matInput matInput
+        placeholder="Enter your Username" pattern="[a-zA-Z-._ ]*" required>
+      <mat-error *ngIf="usernameFormControl.hasError('required')">
+        This field is <strong>required with only these characters [a-zA-Z-._ ]</strong>
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="d-flex justify-content-center mb-2">
+    <mat-form-field class=" full-width" appearance="outline">
+      <mat-label>Firstname</mat-label>
+      <input type="text" name="first_name" [(ngModel)]="userData.first_name" matInput matInput required
+        placeholder="Enter your Firstname" pattern="[a-zA-Z- ]*">
+      <mat-error *ngIf="firstNameFormControl.hasError('required')">
+        This field is <strong>required with only these characters [a-zA-Z- ]</strong>
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="d-flex justify-content-center mb-2">
+    <mat-form-field class=" full-width" appearance="outline">
+      <mat-label>Lastname</mat-label>
+      <input type="text" name="last_name" [(ngModel)]="userData.last_name" matInput matInput required
+        placeholder="Enter your Lastname" pattern="[a-zA-Z- ]*">
+      <mat-error *ngIf="lastNameFormControl.hasError('required')">
+        This field is <strong>required with only these characters [a-zA-Z- ]</strong>
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="d-flex justify-content-center">
+    <mat-form-field class=" full-width" appearance="outline">
+      <mat-label>E-Mail</mat-label>
+      <input pattern="[a-z0-9._+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" type="email" name="email" [(ngModel)]="userData.email"
+        matInput matInput placeholder="Enter your E-Mail" required>
+      <mat-error *ngIf="emailFormControl.hasError('required')">
+        This field is <strong>required</strong> and only allowed a valid email address.
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <mat-dialog-actions class="d-flex justify-content-between mobile">
+    <button mat-flat-button mat-button mat-dialog-close>
+      <mat-icon class="me-2">close</mat-icon>Close
+    </button>
+    <button mat-flat-button color="primary" [mat-dialog-close]="myForm" [disabled]="!myForm.valid"
+      (click)="registerNewUser()" type="submit" class="submit-btn-design">
+      <mat-icon class="me-2">sync_alt</mat-icon>Register User
+    </button>
+  </mat-dialog-actions>
+
+</form>

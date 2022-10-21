@@ -1,51 +1,32 @@
 $colorDark: rgb(42, 54, 71);
 $colorLight: rgb(41, 171, 226);
 
-.logo-animation {
-  position: absolute;
-  animation: logo 2.5s ease-in-out;
-  opacity: 0;
-  transform: scale(0);
-}
-
-.loading-position {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  height: 250px;
-
-  ::ng-deep .mat-progress-spinner circle,
-  .mat-spinner circle {
-    stroke: $colorDark !important;
-  }
-
-}
-
 .sign-in-flex {
-  position: relative;
   padding: 0 16px;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(246, 247, 248, 1);
+  background-color: rgb(246, 247, 248);
 
   .sign-in-container {
     display: flex;
     align-items: center;
     flex-direction: column;
+    text-align: center;
     padding: 24px;
     width: 500px;
     min-height: 400px;
     background-color: white;
     border-radius: 25px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    animation: background-animation 3.5s ease-in-out;
 
     .form-class {
       display: flex;
       flex-direction: column;
+    }
+
+    span {
+      text-align: center;
     }
 
     h1 {
@@ -61,7 +42,6 @@ $colorLight: rgb(41, 171, 226);
       &:hover {
         color: $colorDark;
         transition: all 225ms ease-in-out;
-
       }
 
     }
@@ -72,72 +52,23 @@ $colorLight: rgb(41, 171, 226);
   background-color: $colorDark;
 }
 
-@keyframes logo {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  25% {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  75% {
-    opacity: 0;
-    transform: scale(1);
-  }
-
-  100% {
-    opacity: 0;
-    transform: scale(0);
-  }
-}
-
-@keyframes background-animation {
-  0% {
-    opacity: 0;
-  }
-
-  25% {
-    opacity: 0;
-  }
-
-  50% {
-    opacity: 0;
-  }
-
-  75% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
 ::ng-deep {
 
   /** Overrides caret & text color **/
   .my-form-field.mat-form-field-appearance-legacy .mat-input-element {
-    caret-color: $colorDark !important;
-    color: $colorDark !important;
+    caret-color: $colorDark  !important;
+    color: $colorDark  !important;
   }
 
   .mat-form-field-label,
   .mat-focused {
     /*change color of label*/
-    color: $colorDark !important;
+    color: $colorDark  !important;
   }
 
   /* Border */
   .mat-form-field-appearance-outline .mat-form-field-outline {
-    color: $colorDark !important;
+    color: $colorDark  !important;
   }
 
   /* Font color */
@@ -147,12 +78,12 @@ $colorLight: rgb(41, 171, 226);
   }
 
   .mat-form-field-ripple {
-    background-color: $colorDark !important;
+    background-color: $colorDark  !important;
   }
 
   textarea {
     color: black !important;
-    caret-color: $colorDark !important;
+    caret-color: $colorDark  !important;
   }
 
 }
@@ -164,18 +95,4 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
   -webkit-text-fill-color: rgb(0, 0, 0) !important;
-}
-
-@media(max-width: 400px) {
-  .login-btn-design {
-    display: flex;
-    flex-direction: column;
-    margin: 0 !important;
-  }
-
-  .submit-btn-design {
-    margin-top: 1rem;
-    margin-right: 0 !important;
-  }
-
 }

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { SignUpComponent } from '../auth-components/sign-up/sign-up.component';
+import { RegisterUserComponent } from '../auth-components/register-user/register-user.component';
 import { Ticket } from '../shared/interfaces/ticket';
 import { AuthenticationService } from '../shared/services/authentication-service/authentication.service';
 import { TicketService } from '../shared/services/ticket-service/ticket.service';
 import { EditUserComponent } from '../user-components/edit-user/edit-user.component';
+import { PasswordChangeComponent } from '../user-components/password-change/password-change.component';
 
 @Component({
   selector: 'app-main-content',
@@ -38,8 +39,13 @@ export class MainContentComponent implements OnInit {
   }
 
 
-  openAddNewUser() {
-    const dialogRef = this.dialog.open(SignUpComponent);
+  registerNewUser() {
+    const dialogRef = this.dialog.open(RegisterUserComponent);
+  }
+
+
+  changeUserPassword() {
+    const dialogRef = this.dialog.open(PasswordChangeComponent);
   }
 
 }

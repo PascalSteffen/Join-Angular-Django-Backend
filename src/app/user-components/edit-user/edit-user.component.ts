@@ -10,7 +10,7 @@ import { UserService } from 'src/app/shared/services/user-service/user.service';
 })
 
 export class EditUserComponent implements OnInit {
-  emailFormControl = new FormControl('', [Validators.required]);
+  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   usernameFormControl = new FormControl('', [Validators.required]);
 
   constructor(public authenticationService: AuthenticationService, public userService: UserService) { }

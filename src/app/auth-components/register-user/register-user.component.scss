@@ -1,0 +1,19 @@
+$colorDark: rgb(42, 54, 71);
+$colorLight: rgb(41, 171, 226);
+
+.submit-btn-design {
+  background-color: $colorDark;
+}
+
+.form-container {
+  .mat-form-field {
+    width: 100% !important;
+  }
+}
+
+@media(max-width: 400px) {
+  .mobile {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+}

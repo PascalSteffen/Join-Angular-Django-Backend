@@ -162,11 +162,12 @@ export class TaskService {
   /**
    * update all task values
    * @param priority
-   * @param inProgress
-   * @param awaitingFeedback
+   * @param in_progress
+   * @param awaiting_feedback
    * @param todo
    * @param done
    * @param nextImportantDate
+   * @param NoHistory
    */
   addTaskValues(priority: string, in_progress: boolean, awaiting_feedback: boolean, todo: boolean, done: boolean, nextImportantDate: number, NoHistory: boolean) {
     if (priority === 'Urgent' && NoHistory == false) {

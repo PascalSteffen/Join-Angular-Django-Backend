@@ -66,6 +66,9 @@
           </button>
           <mat-menu #profil="matMenu">
             <button (click)="openEditUser()" mat-menu-item>Edit Profil</button>
+            <button (click)="changeUserPassword()" mat-menu-item>Change Password</button>
+            <button *ngIf="this.authenticationService.currentUserData.is_staff" (click)="registerNewUser()"
+              mat-menu-item>Register New User</button>
             <button class="isAdmin" (click)="authenticationService.logoutUser()" mat-menu-item>Logout</button>
           </mat-menu>
         </div>

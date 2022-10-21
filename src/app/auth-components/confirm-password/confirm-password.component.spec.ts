@@ -2,20 +2,20 @@ import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { SignUpComponent } from './sign-up.component';
+import { ConfirmPasswordComponent } from './confirm-password.component';
 
-describe('SignUpComponent', () => {
-  let component: SignUpComponent;
-  let fixture: ComponentFixture<SignUpComponent>;
+describe('ConfirmPasswordComponent', () => {
+  let component: ConfirmPasswordComponent;
+  let fixture: ComponentFixture<ConfirmPasswordComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SignUpComponent],
+      declarations: [ConfirmPasswordComponent],
       imports: [HttpClientModule, MatSnackBarModule]
     })
       .compileComponents();
 
-    fixture = TestBed.createComponent(SignUpComponent);
+    fixture = TestBed.createComponent(ConfirmPasswordComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

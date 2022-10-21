@@ -14,7 +14,7 @@
 
 <div class="row d-flex justify-content-between text-center mt-3 control-container mb-4">
   <div class="col headline my-3">
-    <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+    <h3>{{ viewDate | date: 'MMMM' }}</h3>
   </div>
 
   <div class="col my-3">

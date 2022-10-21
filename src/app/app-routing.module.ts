@@ -14,11 +14,15 @@ import { TeamComponent } from './nav-components/team/team.component';
 import { TicketSystemComponent } from './nav-components/ticket-system/ticket-system.component';
 import { TicketChatComponent } from './crud-ticket-components/ticket-chat/ticket-chat.component';
 import { CalendarComponent } from './nav-components/calendar/calendar.component';
+import { ConfirmPasswordComponent } from './auth-components/confirm-password/confirm-password.component';
+import { VerifyAccountComponent } from './auth-components/verify-account/verify-account.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/sign-in' },
   { path: 'sign-in', component: SignInComponent, canActivate: [AuthReverseGuard] },
-  /*   { path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [AuthReverseGuard] }, */
+  { path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [AuthReverseGuard] },
+  { path: 'confirm-password', component: ConfirmPasswordComponent, canActivate: [AuthReverseGuard] },
+  { path: 'verify-account', component: VerifyAccountComponent, canActivate: [AuthReverseGuard] },
 
   { path: 'summary', component: SummaryComponent, canActivate: [AuthGuard] },
   { path: 'board', component: BoardComponent, canActivate: [AuthGuard] },
