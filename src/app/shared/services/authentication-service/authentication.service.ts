@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { catchError, of } from 'rxjs';
 import { User } from '../../interfaces/AuthResData';
 import { UtilityServiceService } from '../utility-service/utility-service.service';
 
@@ -31,34 +32,40 @@ export class AuthenticationService {
 
 
   /**
-   * register a new User on API-Endpoint register
+   * get the new token for reset on API-Endpoint password_reset
    * @param userData
    */
   forgotPassword(userData: Object) {
-    this.HttpRequest.post<Object>('https://join-backend-2101.herokuapp.com/api/password_reset/', userData).subscribe(() => {
-      this.utilityService.alert('Password reset successfully.', 5000);
-      this.router.navigate(['confirm-password']);
-    }, error => {
-      if (error.status == 400) {
-        this.utilityService.alert('This email address does not exist. Please contact an administrator.', 5000);
-      }
-    })
+    this.HttpRequest.post<Object>('http://127.0.0.1:8000/api/password_reset/', userData)
+      .pipe(
+        catchError(() => {
+          return of(this.utilityService.alert('This token entry is incorrect. Please contact an administrator.', 5000));
+        })
+      ).subscribe(response => {
+        if (response) {
+          this.utilityService.alert('Password reset successfully.', 5000);
+          this.router.navigate(['verify-account']);
+        }
+      })
   }
 
 
   /**
-   * register a new User on API-Endpoint register
+   * Confirm the new password with the email-token on API-Endpoint password_reset/confirm
    * @param userData
    */
   confirmPassword(userData: Object) {
-    this.HttpRequest.post<Object>('https://join-backend-2101.herokuapp.com/api/password_reset/confirm/', userData).subscribe(() => {
-      this.utilityService.alert('Account was successfully verified with your entered password.', 5000);
-      this.router.navigate(['sign-in']);
-    }, error => {
-      if (error.status == 400) {
-        this.utilityService.alert('This token entry is incorrect. Please contact an administrator.', 5000);
-      }
-    })
+    this.HttpRequest.post<Object>('http://127.0.0.1:8000/api/password_reset/confirm/', userData)
+      .pipe(
+        catchError(() => {
+          return of(this.utilityService.alert('This token entry is incorrect. Please contact an administrator.', 5000));
+        })
+      ).subscribe(response => {
+        if (response) {
+          this.utilityService.alert('Account was successfully verified with your entered password.', 5000);
+          this.router.navigate(['login']);
+        }
+      })
   }
 
 
@@ -68,25 +75,28 @@ export class AuthenticationService {
    */
   loginUser(userData: Object) {
     this.isloading = true;
-    this.HttpRequest.post<Object>('https://join-backend-2101.herokuapp.com/api/auth/login', userData).subscribe(response => {
-      this.token = response['token'];
-      this.checkToken(response['token']).subscribe(response => {
-        this.isloading = false;
-        this.setUserToLocalStorage(response)
-        this.utilityService.alert('Successfully logged in.', 5000);
-        this.router.navigate(['summary']);
-      });
-    }, error => {
-      if (error.status == 400) {
-        this.utilityService.alert('The user does not exist, or the data you entered does not match. Please contact an administrator.', 5000);
-      }
-    })
+    this.HttpRequest.post<Object>('http://127.0.0.1:8000/api/auth/login', userData)
+      .pipe(
+        catchError(() => {
+          return of(this.utilityService.alert('The user does not exist, or the data you entered does not match. Please contact an administrator.', 5000))
+        })
+      ).subscribe(response => {
+        if (response) {
+          this.token = response['token'];
+          this.checkToken(response['token']).subscribe(response => {
+            this.isloading = false;
+            this.setUserToLocalStorage(response)
+            this.utilityService.alert('Successfully logged in.', 5000);
+            this.router.navigate(['home']);
+          })
+        }
+      })
   }
 
 
   /**
    * login a user on API-Endpoint login. After login, token check on next API-Endpoint user.
-   * After token check add user on localstorage and forward to component summary.
+   * After token check add user on localstorage and forward to component home.
    * @param username
    * @param password
    */
@@ -96,14 +106,21 @@ export class AuthenticationService {
       username: username,
       password: password
     }
-    this.HttpRequest.post<Object>('https://join-backend-2101.herokuapp.com/api/auth/login', userdata).subscribe(response => {
+    this.HttpRequest.post<Object>('http://127.0.0.1:8000/api/auth/login', userdata).subscribe(response => {
       this.token = response['token'];
-      this.checkToken(response['token']).subscribe(response => {
-        this.isloading = false;
-        this.setUserToLocalStorage(response)
-        this.utilityService.alert('Successfully logged in.', 5000);
-        this.router.navigate(['summary']);
-      });
+      this.checkToken(response['token'])
+        .pipe(
+          catchError(() => {
+            return of(this.utilityService.alert('This token entry is incorrect. Please contact an administrator.', 5000));
+          })
+        ).subscribe(response => {
+          if (response) {
+            this.isloading = false;
+            this.setUserToLocalStorage(response)
+            this.utilityService.alert('Successfully logged in.', 5000);
+            this.router.navigate(['home']);
+          }
+        });
     })
   }
 
@@ -125,15 +142,17 @@ export class AuthenticationService {
   isAuthenticated() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     if (user) {
-      this.checkToken(user['token']).subscribe(() => {
-        this.currentUserData = user;
-      }, error => {
-        if (error.status == 401) {
-          this.sessionExpired();
-        }
-      });
+      this.checkToken(user['token'])
+        .pipe(
+          catchError(() => {
+            return of(this.sessionExpired())
+          }),
+        ).subscribe(response => {
+          if (response) {
+            this.currentUserData = user;
+          }
+        });
     }
-
   }
 
 
